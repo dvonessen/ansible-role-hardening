@@ -1,2 +1,13 @@
 ---
 # tasks file for ansible-role-hardening
+
+- name: import preflight.yml
+  import_tasks: preflight.yml
+
+- name: import pam.yml
+  import_tasks: pam.yml
+  become: true
+
+- name: import user.yml
+  import_tasks: user.yml
+  become: true

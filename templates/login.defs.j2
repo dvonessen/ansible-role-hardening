@@ -1,0 +1,44 @@
+{{ ansible_managed }}
+# See man 5 login.defs
+
+# Mandatory settings
+MAIL_DIR          {{ hardening_user_login_defs_mail_dir }}
+
+# Static settings
+ENCRYPT_METHOD    SHA512
+ENV_SUPATH        PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+LOG_UNKFAIL_ENAB  no
+LOGIN_RETRIES     5
+LOGIN_TIMEOUT     60
+SU_NAME           su
+SYSLOG_SG_ENAB    yes
+SYSLOG_SU_ENAB    yes
+TTYGROUP          tty
+TTYPERM           0600
+USERGROUPS_ENAB   yes
+
+# Dynamic settings
+CREATE_HOME       {{ hardening_user_login_defs_create_home }}
+DEFAULT_HOME      {{ hardening_user_login_defs_default_home }}
+UMASK             {{ hardening_user_login_defs_umask }}
+ENV_PATH          PATH=/usr/local/bin:/usr/bin:/bin:{{ hardening_user_login_defs_env_paths }}
+UID_MIN           {{ hardening_user_login_defs_uid_min }}
+UID_MAX           60000
+GID_MIN           {{ hardening_user_login_defs_gid_min }}
+GID_MAX           60000
+SYS_UID_MIN       {{ hardening_user_login_defs_sys_uid_min }}
+SYS_UID_MAX       {{ hardening_user_login_defs_uid_min - 1 }}
+SYS_GID_MIN       {{ hardening_user_login_defs_sys_gid_min }}
+SYS_GID_MAX       {{ hardening_user_login_defs_gid_min - 1 }}
+LOG_OK_LOGINS     {{ hardening_user_login_defs_log_ok_logins }}
+PASS_MIN_DAYS     {{ hardening_user_login_defs_pass_min_days }}
+PASS_MAX_DAYS     {{ hardening_user_login_defs_pass_max_days }}
+PASS_WARN_AGE     {{ hardening_user_login_defs_pass_warn_age }}
+SULOG_FILE        {{ hardening_user_login_defs_sulog_file }}
+
+# Key Value loop to add extra values
+{% if hardening_user_login_defs_extra | length > 0 %}
+{% for login_defs_key, login_defs_value in hardening_user_login_defs_extra.items() %}
+login_defs_key login_defs_value
+{% endfor %}
+{% endif %}

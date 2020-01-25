@@ -1,0 +1,110 @@
+---
+- name: pam configuration
+  block:
+    - name: make pam.d/other configuration more verbose
+      pamd:
+        name: other
+        type: "{{ item }}"
+        control: required
+        module_path: pam_deny.so
+        new_type: "{{ item }}"
+        new_control: required
+        new_module_path: pam_warn.so
+        state: before
+      with_items:
+        - auth
+        - account
+        - password
+        - session
+
+    - name: lock user account after x failed login attempts for login
+      pamd:
+        name: login
+        type: auth
+        control: include
+        module_path: postlogin
+        new_type: auth
+        new_control: required
+        new_module_path: pam_faillock.so
+        module_arguments:
+          - authfail
+          - "deny={{ hardening_pam_failed_logins }}"
+          - even_deny_root
+          - "unlock_time={{ hardening_pam_unlock_time }}"
+        state: after
+
+    - name: enforce delay after failed login on terminal for login
+      pamd:
+        name: login
+        type: auth
+        control: required
+        module_path: pam_faillock.so
+        new_type: auth
+        new_control: optional
+        new_module_path: pam_faildelay.so
+        module_arguments:
+          - "delay={{ hardening_pam_fail_delay }}"
+        state: after
+
+    - name: lock user account after x failed login attempts for su
+      pamd:
+        name: su
+        type: auth
+        control: include
+        module_path: postlogin
+        new_type: auth
+        new_control: required
+        new_module_path: pam_faillock.so
+        module_arguments:
+          - authfail
+          - "deny={{ hardening_pam_failed_logins }}"
+          - even_deny_root
+          - "unlock_time={{ hardening_pam_unlock_time }}"
+        state: after
+
+    - name: enforce delay after failed login on terminal for su
+      pamd:
+        name: su
+        type: auth
+        control: required
+        module_path: pam_faillock.so
+        new_type: auth
+        new_control: optional
+        new_module_path: pam_faildelay.so
+        module_arguments:
+          - "delay={{ hardening_pam_fail_delay }}"
+        state: after
+  when:
+    - ansible_os_family == "RedHat"
+
+- name: pam configuration
+  block:
+    - name: enforce delay after failed login on terminal
+      pamd:
+        name: common-auth
+        type: auth
+        control: "[success=1 default=ignore]"
+        module_path: pam_unix.so
+        new_type: auth
+        new_control: optional
+        new_module_path: pam_faildelay.so
+        module_arguments:
+          - "delay={{ hardening_pam_fail_delay }}"
+        state: after
+
+    - name: lock user account after 10 failed login attempts
+      pamd:
+        name: common-auth
+        type: auth
+        control: optional
+        module_path: pam_faildelay.so
+        new_type: auth
+        new_control: required
+        new_module_path: pam_tally2.so
+        module_arguments:
+          - "deny={{ hardening_pam_failed_logins }}"
+          - even_deny_root
+          - "unlock_time={{ hardening_pam_unlock_time }}"
+        state: after
+  when:
+    - ansible_os_family == "Debian"
