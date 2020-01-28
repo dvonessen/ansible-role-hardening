@@ -1,48 +1,97 @@
-Role Name
-=========
+# hardening (Ansible role)
+-----------------------
 
-A brief description of the role goes here.
+This role keeps a baseline of linux hardening options.
 
-Requirements
-------------
+## Description
 
-Any pre-requisites that may not be covered by Ansible itself or the role should
-be mentioned here. For instance, if the role uses the EC2 module, it may be a
-good idea to mention in this section that the boto package is required.
+The role is devided into different parts:
 
-Role Variables
---------------
+- Configuration of PAM (Pluggable Authentication Model)
+- Configuration of `login.defs`
+- Set some good Kernel limits
+- Configure sudo
+- Creating an administrativ user and group
 
-A description of the settable variables for this role should go here, including
-any variables that are in defaults/main.yml, vars/main.yml, and any variables
-that can/should be set via parameters to the role. Any variables that are read
-from other roles and/or the global scope (ie. hostvars, group vars, etc.) should
-be mentioned here as well.
+## Caution
 
-Dependencies
-------------
+!This role does not update your OS.!
 
-A list of other roles hosted on Galaxy should go here, plus any details in
-regards to parameters that may need to be set for other roles, or variables that
-are used from other roles.
+## Variables
 
-Example Playbook
-----------------
+### PAM
 
-Including an example of how to use your role (for instance, with variables
-passed in as parameters) is always nice for users too:
+| Name                                 | Default  | Description                                                      |
+| :----------------------------------- | :------: | ---------------------------------------------------------------- |
+| `hardening_enable_pam_configuration` |   true   | Enables/Disables PAM hardening.                                  |
+| `hardening_pam_failed_logins`        |    4     | Faild login tries before user account gets locked.               |
+| `hardening_pam_unlock_time`          |    60    | Seconds how long user account will be locked after n tries.      |
+| `hardening_pam_fail_delay`           | 10000000 | Milliseconds how long the delay is after failing authentication. |
 
-    - hosts: servers
-      roles:
-         - { role: ansible-role-hardening, x: 42 }
+### Login defs
 
-License
--------
+| Name                                        |        Default         | Description                                                             |
+| :------------------------------------------ | :--------------------: | ----------------------------------------------------------------------- |
+| `hardening_enable_login_defs_configuration` |          true          | Enables/Disables login.defs configurations.                             |
+| `hardening_login_defs_mail_dir`             |     __/var/mail__      | Directory to store user mails.                                          |
+| `hardening_login_defs_create_home`          |          yes           | Create by default ,home directory if it doesn't exist.                  |
+| `hardening_login_defs_default_home`         |           no           | Allow login if no home directory for user exist.                        |
+| `hardening_login_defs_umask`                |          077           | Sets umask for home directory creation.                                 |
+| `hardening_login_defs_env_paths`            |           []           | Extend PATH environment variable with extra paths.                      |
+| `hardening_login_defs_uid_min`              |         10000          | UID minimum while creating new users.                                   |
+| `hardening_login_defs_gid_min`              |         10000          | GID minimum while creating new groups.                                  |
+| `hardening_login_defs_sys_uid_min`          |          1000          | UID minimum while creating new system users.                            |
+| `hardening_login_defs_sys_gid_min`          |          1000          | GID minimum while creating new system groups.                           |
+| `hardening_login_defs_log_ok_logins`        |          yes           | Enables/Disables logging of successful logins.                          |
+| `hardening_login_defs_pass_min_days`        |           7            | Minimum days to keep password after changing.                           |
+| `hardening_login_defs_pass_max_days`        |          180           | Maximum age for user password in days.                                  |
+| `hardening_login_defs_pass_warn_age`        |           14           | Number of days before password will be expired to print a warn message. |
+| `hardening_login_defs_sulog_file`           | __/var/log/sulog.log__ | Logfile location to log `su` command executions to.                     |
+| `hardening_login_defs_extra`                |           {}           | Dictionary to use for extra arguments to setup `login.defs`.            |
 
-BSD
+### Limits
 
-Author Information
-------------------
+| Name                                    | Default | Description                                   |
+| :-------------------------------------- | :-----: | --------------------------------------------- |
+| `hardening_enable_limits_configuration` |  true   | Enables/Disables kernel limits configuration. |
 
-An optional section for the role authors to include contact information, or a
-website (HTML is not allowed).
+### User
+| Name                                                  | Default | Description                                                                         |
+| :---------------------------------------------------- | :-----: | ----------------------------------------------------------------------------------- |
+| `hardening_enable_user_configuration`                 |  true   | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
+| `hardening_user_admin_user`                           |  admin  | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
+| `hardening_user_admin_group`                          | admins  | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
+| `hardening_user_admin_user_ssh_pub_keys` __required__ |  [] qw  | List of public SSH keys to place into administrativ account.                        |
+
+## Tags
+
+| Name                   | Description                           |
+| ---------------------- | ------------------------------------- |
+| `hardening_pam`        | Includes pam configuration.           |
+| `hardening_login_defs` | Includes `login.defs` configuration.  |
+| `hardening_limits`     | Includes kernel limits configuration. |
+| `hardening_user`       | Creation of administrativ user.       |
+
+## Dependencies
+---------------
+
+**None**
+
+## Example Playbook
+-------------------
+
+```yaml
+- name: All
+  hosts: all
+  debugger: on_failed
+  roles:
+    - role: ansible-role-hardening
+```
+
+## License
+
+MIT License
+
+## Contributors
+
+Daniel von Eßen

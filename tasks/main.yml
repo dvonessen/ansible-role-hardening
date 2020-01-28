@@ -3,11 +3,33 @@
 
 - name: import preflight.yml
   import_tasks: preflight.yml
+  tags:
+    - always
 
 - name: import pam.yml
   import_tasks: pam.yml
   become: true
+  when: hardening_enable_pam_configuration | bool
+  tags:
+    - hardening_pam
+
+- name: import login_defs.yml
+  import_tasks: login_defs.yml
+  become: true
+  when: hardening_enable_login_defs_configuration | bool
+  tags:
+    - hardening_login_defs
+
+- name: import limits.yml
+  import_tasks: limits.yml
+  become: true
+  when: hardening_enable_limits_configuration
+  tags:
+    - hardening_limits
 
 - name: import user.yml
   import_tasks: user.yml
   become: true
+  when: hardening_enable_user_configuration | bool
+  tags:
+    - hardening_user

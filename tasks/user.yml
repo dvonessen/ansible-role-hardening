@@ -1,9 +1,22 @@
----
-- name: configure login.defs
-  template:
-    src: login.defs.j2
-    dest: /etc/login.defs
-    owner: root
-    group: root
-    mode: 0644
-  become: true
+- name: create administrator group
+  group:
+    name: "{{ hardening_user_admin_group }}"
+    state: present
+    gid: 10000
+
+- name: create administrativ user
+  user:
+    name: "{{ hardening_user_admin_user }}"
+    comment: Administrativ User
+    group: "{{ hardening_user_admin_group }}"
+    uid: 10000
+
+- name: copy publickey to administrativ users home dir
+  authorized_key:
+    user: "{{ hardening_user_admin_user }}"
+    key: "{{ item }}"
+  when:
+    - hardening_user_admin_user_ssh_pub_keys is defined
+    - hardening_user_admin_user_ssh_pub_keys | length > 0
+  with_items:
+    - hardening_user_admin_user_ssh_pub_keys
