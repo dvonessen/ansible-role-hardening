@@ -1,1 +1,42 @@
 ---
+- name: ensure limits.d directory exists
+  file:
+    owner: root
+    group: root
+    mode: 0755
+    path: /etc/security/limits.d
+    state: directory
+
+- name: disable core dumps
+  pam_limits:
+    comment: "Limit core dumps for all user"
+    dest: /etc/security/limits.d/10-core-dumps.conf
+    domain: "*"
+    limit_item: core
+    limit_type: hard
+    value: "0"
+  when: hardening_limits_disable_core_dumps | bool
+
+- name: enable core dumps
+  file:
+    path: /etc/security/limits.d/10-core-dumps.conf
+    state: absent
+  when: not hardening_limits_disable_core_dumps | bool
+
+- name: limiting process count (soft)
+  pam_limits:
+    comment: "Limits process count per user (soft)"
+    dest: /etc/security/limits.d/11-limit-proc-count.conf
+    domain: "*"
+    limit_item: nproc
+    limit_type: soft
+    value: "{{ hardening_limits_process_count_soft | int }}"
+
+- name: limiting process count (hard)
+  pam_limits:
+    comment: "Limits process count per user (hard)"
+    dest: /etc/security/limits.d/11-limit-proc-count.conf
+    domain: "*"
+    limit_item: nproc
+    limit_type: hard
+    value: "{{ hardening_limits_process_count_hard | int }}"

@@ -44,3 +44,12 @@ hardening_login_defs_extra: {}
 hardening_enable_user_configuration: true
 hardening_user_admin_user: admin
 hardening_user_admin_group: admins
+
+# limits.yml
+hardening_enable_limits_configuration: true
+# Enables/Disables creation of core dumps on system
+hardening_limits_disable_core_dumps: true
+
+# Sets the soft and hard limit for processes per user
+hardening_limits_process_count_soft: 100
+hardening_limits_process_count_hard: 500

@@ -57,9 +57,12 @@ The role is devided into different parts:
 
 ### Limits
 
-| Name                                    | Default | Description                                   |
-| :-------------------------------------- | :-----: | --------------------------------------------- |
-| `hardening_enable_limits_configuration` |  true   | Enables/Disables kernel limits configuration. |
+| Name                                    | Default | Description                                                  |
+| :-------------------------------------- | :-----: | ------------------------------------------------------------ |
+| `hardening_enable_limits_configuration` |  true   | Enables/Disables kernel limits configuration.                |
+| `hardening_limits_disable_core_dumps`   |  true   | Enables/Disables core dump creation.                         |
+| `hardening_limits_process_count_soft`   |   100   | Sets the __soft__ limit for per user process creation count. |
+| `hardening_limits_process_count_hard`   |   500   | Sets the __hard__ limit for per user process creation count. |
 
 ### User
 | Name                                                  | Default | Description                                                                         |
@@ -67,7 +70,7 @@ The role is devided into different parts:
 | `hardening_enable_user_configuration`                 |  true   | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
 | `hardening_user_admin_user`                           |  admin  | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
 | `hardening_user_admin_group`                          | admins  | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
-| `hardening_user_admin_user_ssh_pub_keys` __required__ |  [] qw  | List of public SSH keys to place into administrativ account.                        |
+| `hardening_user_admin_user_ssh_pub_keys` __required__ |   []    | List of public SSH keys to place into administrativ account.                        |
 
 ## Tags
 

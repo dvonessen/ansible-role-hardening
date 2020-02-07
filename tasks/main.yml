@@ -20,12 +20,12 @@
   tags:
     - hardening_login_defs
 
-# - name: import limits.yml
-#   import_tasks: limits.yml
-#   become: true
-#   when: hardening_enable_limits_configuration
-#   tags:
-#     - hardening_limits
+- name: import limits.yml
+  import_tasks: limits.yml
+  become: true
+  when: hardening_enable_limits_configuration | bool
+  tags:
+    - hardening_limits
 
 # - name: import user.yml
 #   import_tasks: user.yml
