@@ -74,6 +74,19 @@
         module_arguments:
           - "delay={{ hardening_pam_fail_delay }}"
         state: after
+
+    - name: set global umask
+      pamd:
+        name: postlogin
+        type: session
+        control: optional
+        module_path: pam_umask.so
+        new_type: session
+        new_control: required
+        new_module_path: pam_umask.so
+        module_arguments:
+          - umask=0077
+        state: updated
   when:
     - ansible_os_family == "RedHat"
 
@@ -106,5 +119,18 @@
           - even_deny_root
           - "unlock_time={{ hardening_pam_unlock_time }}"
         state: after
+
+    - name: set global umask
+      pamd:
+        name: common-session
+        type: session
+        control: required
+        module_path: pam_unix.so
+        new_type: session
+        new_control: required
+        new_module_path: pam_umask.so
+        module_arguments:
+          - umask=0077
+        state: before
   when:
     - ansible_os_family == "Debian"

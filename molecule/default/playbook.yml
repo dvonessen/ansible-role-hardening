@@ -6,7 +6,7 @@
   roles:
     - role: ansible-role-hardening
   vars:
-    hardening_login_defs_sulog_file: no
+    hardening_login_defs_sulog_file: "no"
     hardening_login_defs_env_paths:
       - ~/bin
       - ~/.bin

@@ -1,4 +1,7 @@
 ---
+# Systemwide variables
+hardening_system_umask: "0077"
+
 # pam.yml variables
 hardening_enable_pam_configuration: true
 hardening_pam_failed_logins: 4
@@ -14,9 +17,9 @@ hardening_login_defs_default_home: "no"
 
 # Prevents the creation of home directories with
 # read or write permissions to the directory group or others
-hardening_login_defs_umask: 077
+hardening_login_defs_umask: "{{ hardening_system_umask }}"
 hardening_login_defs_env_paths: []
-  # - $HOME/bin
+#  - $HOME/bin
 
 # Maximum is statically assigend to 60000
 hardening_login_defs_uid_min: 10000
@@ -34,8 +37,8 @@ hardening_login_defs_pass_warn_age: 14
 hardening_login_defs_sulog_file: "/var/log/sulog.log"
 
 hardening_login_defs_extra: {}
-  # CHFN_RESTRICT: rwh
-  # CONSOLE_GROUPS: "floppy:audio:cdrom"
+#  CHFN_RESTRICT: rwh
+#  CONSOLE_GROUPS: "floppy:audio:cdrom"
 
 # user.yml variables
 hardening_enable_user_configuration: true

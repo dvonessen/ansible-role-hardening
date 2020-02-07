@@ -8,13 +8,13 @@ lint:
 platforms:
   - name: hardening_centos8
     image: registry.gitlab.com/dvonessen/docker-ansible-nonroot-centos:8
-    pre_build_image: True
+    pre_build_image: true
   - name: hardening_debian10
     image: registry.gitlab.com/dvonessen/docker-ansible-nonroot-debian:10
-    pre_build_image: True
+    pre_build_image: true
   - name: hardening_ubuntu1804
     image: registry.gitlab.com/dvonessen/docker-ansible-nonroot-ubuntu:18.04
-    pre_build_image: True
+    pre_build_image: true
 provisioner:
   name: ansible
   lint:

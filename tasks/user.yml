@@ -1,3 +1,4 @@
+---
 - name: create administrator group
   group:
     name: "{{ hardening_user_admin_group }}"
