@@ -1,0 +1,10 @@
+---
+hardening_file_perms_shadow:
+  user: root
+  group: shadow
+  mode: 0640
+
+hardening_file_perms_passwd:
+  user: root
+  group: root
+  mode: 0644

@@ -1,2 +1,9 @@
 ---
-# vars file for ansible-role-hardening
+# file_permissions.yml
+__hardening_file_perms_bin_dirs:
+  - /bin
+  - /sbin
+  - /usr/bin
+  - /usr/sbin
+  - /usr/local/bin
+  - /usr/local/sbin

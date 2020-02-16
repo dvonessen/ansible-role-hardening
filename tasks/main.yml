@@ -1,8 +1,15 @@
 ---
-# tasks file for ansible-role-hardening
-
 - name: import preflight.yml
   import_tasks: preflight.yml
+  tags:
+    - always
+
+- name: include os dependent variable file
+  include_vars: "{{ item }}"
+  with_first_found:
+    files:
+      - "{{ ansible_os_family | lower }}.yml"
+    skip: true
   tags:
     - always
 
@@ -26,6 +33,13 @@
   when: hardening_enable_limits_configuration | bool
   tags:
     - hardening_limits
+
+- name: import file_permissions.yml
+  import_tasks: file_permissions.yml
+  become: true
+  when: hardening_enable_file_perms_configuration | bool
+  tags:
+    - hardening_file_permissions
 
 # - name: import user.yml
 #   import_tasks: user.yml

@@ -64,7 +64,15 @@ The role is devided into different parts:
 | `hardening_limits_process_count_soft`   |   100   | Sets the __soft__ limit for per user process creation count. |
 | `hardening_limits_process_count_hard`   |   500   | Sets the __hard__ limit for per user process creation count. |
 
+### File permissions
+
+| Name                                        | Default | Description                                                                    |
+| :------------------------------------------ | :-----: | ------------------------------------------------------------------------------ |
+| `hardening_enable_file_perms_configuration` |  true   | Enables/Disables setting and ensuring now write for group and others on files. |
+| `hardening_file_perms_extra_bin_dirs`       |   []    | Extra directories to search and set to non write for group and others.         |
+
 ### User
+
 | Name                                                  | Default | Description                                                                         |
 | :---------------------------------------------------- | :-----: | ----------------------------------------------------------------------------------- |
 | `hardening_enable_user_configuration`                 |  true   | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
@@ -74,12 +82,13 @@ The role is devided into different parts:
 
 ## Tags
 
-| Name                   | Description                           |
-| ---------------------- | ------------------------------------- |
-| `hardening_pam`        | Includes pam configuration.           |
-| `hardening_login_defs` | Includes `login.defs` configuration.  |
-| `hardening_limits`     | Includes kernel limits configuration. |
-| `hardening_user`       | Creation of administrativ user.       |
+| Name                         | Description                              |
+| ---------------------------- | ---------------------------------------- |
+| `hardening_pam`              | Includes pam configuration.              |
+| `hardening_login_defs`       | Includes `login.defs` configuration.     |
+| `hardening_limits`           | Includes kernel limits configuration.    |
+| `hardening_file_permissions` | Includes file permissions configuration. |
+| `hardening_user`             | Creation of administrativ user.          |
 
 ## Dependencies
 ---------------
