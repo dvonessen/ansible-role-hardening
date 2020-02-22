@@ -7,3 +7,29 @@ __hardening_file_perms_bin_dirs:
   - /usr/sbin
   - /usr/local/bin
   - /usr/local/sbin
+
+__hardening_filesystem_module_blacklist:
+  - adfs
+  - affs
+  - befs
+  - bfs
+  - cramfs
+  - efs
+  - erofs
+  - exofs
+  - f2fs
+  - freevxfs
+  - hfs
+  - hfsplus
+  - hpfs
+  - jffs2
+  - jfs
+  - minix
+  - nilfs2
+  - qnx4
+  - qnx6
+  - squashfs
+  - sysv
+  - ubifs
+  - udf
+  - ufs

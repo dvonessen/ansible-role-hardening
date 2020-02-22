@@ -1,0 +1,4 @@
+---
+- name: reboot system
+  reboot:
+  when: ansible_virtualization_type | lower != "docker"

@@ -1,7 +1,7 @@
 ---
 - name: configure login.defs
   template:
-    src: login.defs.j2
+    src: etc/login.defs.j2
     dest: /etc/login.defs
     owner: root
     group: root

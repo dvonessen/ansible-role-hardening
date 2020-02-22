@@ -2,9 +2,17 @@
 hardening_file_perms_shadow:
   user: root
   group: root
-  mode: 0000
+  mode: "0000"
 
 hardening_file_perms_passwd:
   user: root
   group: root
-  mode: 0644
+  mode: "0644"
+
+hardening_filesystem_package: kmod
+
+# Crypto setting to set systemwide default
+# cryptographic policies use FUTURE to get most secure
+# crypto settings.
+# See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening
+hardening_crypto_policies: "FUTURE"

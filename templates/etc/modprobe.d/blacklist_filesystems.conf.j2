@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+
+# Disabling unused or vulnerable filesystem modules
+{% for filesystem in __hardening_filesystem_module_blacklist | difference(hardening_filesystem_whitelist) %}
+install {{ filesystem }} /bin/true
+{% endfor %}

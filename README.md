@@ -71,6 +71,25 @@ The role is devided into different parts:
 | `hardening_enable_file_perms_configuration` |  true   | Enables/Disables setting and ensuring now write for group and others on files. |
 | `hardening_file_perms_extra_bin_dirs`       |   []    | Extra directories to search and set to non write for group and others.         |
 
+### Deactivate old and and vulnerable filesystems
+
+| Name                                              | Default | Description                                                          |
+| :------------------------------------------------ | :-----: | -------------------------------------------------------------------- |
+| `hardening_enable_filesytem_module_configuration` |  true   | Enables/Disables blacklisting of old and vulnerable filesystems.     |
+| `hardening_filesystem_package`                    |  kmod   | Package to install to be able to configure blacklist of filesystems. |
+| `hardening_filesystem_whitelist`                  |   []    | List of filesystems you want to exclude from the blacklist list.     |
+
+### Cryptop policies (only RedHat)
+
+This playbook will set the systemwide crypto policy.
+:exclamation: This module only runs on RedHat based distributions.
+
+| Name                                                  | Default | Description                                   |
+| :---------------------------------------------------- | :-----: | --------------------------------------------- |
+| `hardening_enable_crypto_policy_module_configuration` |  true   | Enables/Disables crypto policy configuration. |
+| `hardening_crypto_policy`                             | FUTURE  | Set by default the crypto policy to FUTURE    |
+
+
 ### User
 
 | Name                                                  | Default | Description                                                                         |
@@ -79,6 +98,10 @@ The role is devided into different parts:
 | `hardening_user_admin_user`                           |  admin  | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
 | `hardening_user_admin_group`                          | admins  | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
 | `hardening_user_admin_user_ssh_pub_keys` __required__ |   []    | List of public SSH keys to place into administrativ account.                        |
+
+### Reboot
+
+The system will be rebooted if anything has changed
 
 ## Tags
 

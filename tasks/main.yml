@@ -4,12 +4,17 @@
   tags:
     - always
 
+- name: include main vars.
+  include_vars: main.yml
+  tags:
+    - always
+
 - name: include os dependent variable file
   include_vars: "{{ item }}"
   with_first_found:
-    files:
-      - "{{ ansible_os_family | lower }}.yml"
-    skip: true
+    - files:
+        - "{{ ansible_os_family | lower }}.yml"
+      skip: true
   tags:
     - always
 
@@ -40,6 +45,22 @@
   when: hardening_enable_file_perms_configuration | bool
   tags:
     - hardening_file_permissions
+
+- name: import blacklist_filesystems.yml
+  import_tasks: blacklist_filesystems.yml
+  become: true
+  when: hardening_enable_filesytem_module_configuration | bool
+  tags:
+    - hardening_enable_filesytem_module
+
+- name: import crypto_policy.yml
+  import_tasks: crypto_policy.yml
+  become: true
+  when:
+    - hardening_enable_crypto_policy_module_configuration | bool
+    - ansible_os_family | lower == "redhat"
+  tags:
+    - hardening_enable_crypto_policy_module
 
 # - name: import user.yml
 #   import_tasks: user.yml

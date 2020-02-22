@@ -1,0 +1,15 @@
+---
+- name: create system wide crypto policy config
+  template:
+    src: etc/crypto-policies/config.j2
+    dest: /etc/crypto-policies/config
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  register: __crypto_config
+  notify: reboot system
+
+- name: propagate crypto policy config
+  command: update-crypto-policies
+  when: __crypto_config.changed | bool

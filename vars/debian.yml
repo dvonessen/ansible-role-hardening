@@ -2,9 +2,11 @@
 hardening_file_perms_shadow:
   user: root
   group: shadow
-  mode: 0640
+  mode: "0640"
+
+hardening_filesystem_package: kmod
 
 hardening_file_perms_passwd:
   user: root
   group: root
-  mode: 0644
+  mode: "0644"

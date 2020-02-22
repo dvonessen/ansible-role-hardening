@@ -54,9 +54,16 @@ hardening_limits_disable_core_dumps: true
 hardening_limits_process_count_soft: 100
 hardening_limits_process_count_hard: 500
 
-
 # file_permissions.yml
 hardening_enable_file_perms_configuration: true
 # Extra list of directories appendend to internal list
 # to find files with group write permission and unset write perm
 hardening_file_perms_extra_bin_dirs: []
+
+# blacklist_filesystems.yml
+hardening_enable_filesytem_module_configuration: true
+hardening_filesystem_whitelist: ["ufs"]
+
+# cryptop_policy.yml
+hardening_enable_crypto_policy_module_configuration: true
+hardening_crypto_policy: FUTURE
