@@ -3,8 +3,7 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: yamllint
 platforms:
   - name: hardening_centos8
     image: registry.gitlab.com/dvonessen/docker-ansible-nonroot-centos:8
@@ -17,6 +16,9 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      stdout_callback: yaml
   lint:
     name: ansible-lint
 verifier:
