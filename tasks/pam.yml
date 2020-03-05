@@ -87,6 +87,45 @@
         module_arguments:
           - umask=0077
         state: updated
+
+    - name: prevent login to passwordless accounts
+      pamd:
+        name: password-auth
+        type: "{{ item }}"
+        control: sufficient
+        module_path: pam_unix.so
+        module_arguments:
+          - nullok
+        state: args_absent
+      loop:
+        - auth
+        - password
+
+    - name: prevent login to passwordless accounts
+      pamd:
+        name: system-auth
+        type: "{{ item }}"
+        control: sufficient
+        module_path: pam_unix.so
+        module_arguments:
+          - nullok
+        state: args_absent
+      loop:
+        - auth
+        - password
+
+    - name: prevent login to passwordless accounts
+      pamd:
+        name: password-auth
+        type: "{{ item }}"
+        control: "[success=done ignore=ignore default=die]"
+        module_path: pam_unix.so
+        module_arguments:
+          - nullok
+        state: args_absent
+      loop:
+        - auth
+        - password
   when:
     - ansible_os_family == "RedHat"
 
