@@ -1,0 +1,16 @@
+---
+- name: install sysctl package
+  package:
+    name: "{{ hardening_syctl_package }}"
+    state: present
+  become: true
+
+- name: ensure DAC on symlinks is configured
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_file: "{{ __hardening_sysctl_conf }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{ __hardening_sysctl_kernel_parameters }}"
+  become: true
+  notify: reboot system
