@@ -69,7 +69,6 @@ The role is devided into different parts:
 | Name                                        | Default | Description                                                                    |
 | :------------------------------------------ | :-----: | ------------------------------------------------------------------------------ |
 | `hardening_enable_file_perms_configuration` |  true   | Enables/Disables setting and ensuring now write for group and others on files. |
-| `hardening_file_perms_extra_bin_dirs`       |   []    | Extra directories to search and set to non write for group and others.         |
 
 ### Deactivate old and and vulnerable filesystems
 
@@ -87,7 +86,7 @@ This playbook will set the systemwide crypto policy.
 | Name                                                  | Default | Description                                   |
 | :---------------------------------------------------- | :-----: | --------------------------------------------- |
 | `hardening_enable_crypto_policy_module_configuration` |  true   | Enables/Disables crypto policy configuration. |
-| `hardening_crypto_policy`                             | FUTURE  | Set by default the crypto policy to FUTURE    |
+| `hardening_crypto_policy`                             | DEFAULT | Set by default the crypto policy.             |
 
 
 ### User

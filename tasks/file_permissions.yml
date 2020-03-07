@@ -20,46 +20,88 @@
   block:
     - name: find world writable files
       shell:
-        cmd: 'find / -type f -perm /o=w -print -o \( -path /dev -or -path /sys -or -path /proc -or -path {{ (__hardening_file_perms_bin_dirs | list + hardening_file_perms_extra_bin_dirs | list ) | join(" -or -path ") }} \) -prune'
+        cmd: 'find / -type f -perm /o=w -print -o \( -path /dev -or -path /sys -or -path /proc -or -path {{ __hardening_file_perms_bin_dirs | list | join(" -or -path ") }} \) -prune'
       register: __found_world_writeable_files
       changed_when: false
       ignore_errors: true
 
     - name: remove world writable flag from files
-      stat:
+      file:
         path: "{{ item }}"
         mode: o-w
         state: file
       loop: "{{ __found_world_writeable_files.stdout_lines }}"
 
+- name: ensure on world writable directories SGID is set
+  block:
+    - name: find world writable directories
+      shell:
+        cmd: 'find / -type d -perm /o=w -print -o \( -path /dev -or -path /sys -or -path /proc \) -prune'
+      register: __found_world_writeable_directories
+      changed_when: false
+      ignore_errors: true
 
-- name: find files in bin directories with group or other write permissions
-  shell:
-    cmd: "find -L {{ (__hardening_file_perms_bin_dirs | list + hardening_file_perms_extra_bin_dirs | list) | join(' ') }} -type f -perm /go+w"
-  register: __found_group_other_write_bin_files
-  changed_when: false
-  ignore_errors: true
+    - name: set sticky bit to world writable directories
+      file:
+        path: "{{ item }}"
+        mode: +t
+        state: directory
+      loop: "{{ __found_world_writeable_directories.stdout_lines }}"
 
-- name: unset group and others write permission in bin directories
-  file:
-    path: "{{ item }}"
-    mode: go-w
-    state: file
-  loop: "{{ __found_group_other_write_bin_files.stdout_lines }}"
+- name: ensure system binaries are not writeable by group or world
+  block:
+    - name: find files in bin directories with group or other write permissions
+      shell:
+        cmd: "find -L {{ __hardening_file_perms_bin_dirs | list  | join(' ') }} -type f -perm /go+w"
+      register: __found_group_other_write_bin_files
+      changed_when: false
+      ignore_errors: true
 
-- name: ensure shadow permissions
-  file:
-    path: /etc/shadow
-    owner: "{{ hardening_file_perms_shadow.user }}"
-    group: "{{ hardening_file_perms_shadow.group }}"
-    mode: "{{ hardening_file_perms_shadow.mode }}"
+    - name: unset group and others write permission in bin directories
+      file:
+        path: "{{ item }}"
+        mode: go-w
+        state: file
+      loop: "{{ __found_group_other_write_bin_files.stdout_lines }}"
 
-- name: ensure passwd permissions
-  file:
-    path: /etc/passwd
-    owner: "{{ hardening_file_perms_passwd.user }}"
-    group: "{{ hardening_file_perms_passwd.group }}"
-    mode: "{{ hardening_file_perms_passwd.mode }}"
+- name: ensure account files have correct permissions
+  block:
+    - name: ensure shadow permissions
+      file:
+        path: "{{ item }}"
+        owner: "{{ hardening_file_perms_shadow.user }}"
+        group: "{{ hardening_file_perms_shadow.group }}"
+        mode: "{{ hardening_file_perms_shadow.mode }}"
+      loop:
+        - /etc/shadow
+        - /etc/gshadow
+
+    - name: ensure passwd permissions
+      file:
+        path: "{{ item }}"
+        owner: "{{ hardening_file_perms_passwd.user }}"
+        group: "{{ hardening_file_perms_passwd.group }}"
+        mode: "{{ hardening_file_perms_passwd.mode }}"
+      loop:
+        - /etc/passwd
+        - /etc/group
+
+- name: ensure system libraries have restrictive permissions
+  block:
+    - name: find all system library files
+      shell:
+        cmd: "find /lib* /usr/lib* -type f -perm /go=w -o -type f -not -user root"
+      changed_when: false
+      ignore_errors: true
+      register: __found_system_libraries_perm_not_root
+
+    - name: set correct owner and permission to system libraries
+      file:
+        path: "{{ item }}"
+        owner: root
+        mode: og-w
+        state: file
+      loop: "{{ __found_system_libraries_perm_not_root.stdout_lines }}"
 
 - name: change su perms to only be accessible by root
   file:

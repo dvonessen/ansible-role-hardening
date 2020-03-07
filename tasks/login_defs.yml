@@ -14,5 +14,15 @@
     group: root
     mode: 0644
     path: /etc/profile
-    regexp: '([ \t])(umask)([ \t])\d{3,4}'
+    regexp: '([ \t])*(umask)([ \t])*\d{3,4}'
     replace: '\1umask {{ hardening_system_umask }}'
+
+- name: set umask for init.d functions
+  replace:
+    owner: root
+    group: root
+    mode: 0644
+    path: /etc/init.d/functions
+    regexp: '([ \t])*(umask)([ \t])*\d{3,4}'
+    replace: '\1umask {{ hardening_system_umask }}'
+  when: ansible_os_family == "RedHat"

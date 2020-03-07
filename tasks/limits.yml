@@ -6,6 +6,7 @@
     mode: 0755
     path: /etc/security/limits.d
     state: directory
+  notify: reboot system
 
 - name: disable core dumps
   pam_limits:
@@ -16,12 +17,14 @@
     limit_type: hard
     value: "0"
   when: hardening_limits_disable_core_dumps | bool
+  notify: reboot system
 
 - name: enable core dumps
   file:
     path: /etc/security/limits.d/10-core-dumps.conf
     state: absent
   when: not hardening_limits_disable_core_dumps | bool
+  notify: reboot system
 
 - name: limiting process count (soft)
   pam_limits:
@@ -31,6 +34,7 @@
     limit_item: nproc
     limit_type: soft
     value: "{{ hardening_limits_process_count_soft | int }}"
+  notify: reboot system
 
 - name: limiting process count (hard)
   pam_limits:
@@ -40,3 +44,4 @@
     limit_item: nproc
     limit_type: hard
     value: "{{ hardening_limits_process_count_hard | int }}"
+  notify: reboot system

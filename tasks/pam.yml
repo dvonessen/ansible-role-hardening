@@ -46,34 +46,34 @@
           - "delay={{ hardening_pam_fail_delay }}"
         state: after
 
-    - name: lock user account after x failed login attempts for su
-      pamd:
-        name: su
-        type: auth
-        control: include
-        module_path: postlogin
-        new_type: auth
-        new_control: required
-        new_module_path: pam_faillock.so
-        module_arguments:
-          - authfail
-          - "deny={{ hardening_pam_failed_logins }}"
-          - even_deny_root
-          - "unlock_time={{ hardening_pam_unlock_time }}"
-        state: after
+    # - name: lock user account after x failed login attempts for su
+    #   pamd:
+    #     name: su
+    #     type: auth
+    #     control: include
+    #     module_path: postlogin
+    #     new_type: auth
+    #     new_control: required
+    #     new_module_path: pam_faillock.so
+    #     module_arguments:
+    #       - authfail
+    #       - "deny={{ hardening_pam_failed_logins }}"
+    #       - even_deny_root
+    #       - "unlock_time={{ hardening_pam_unlock_time }}"
+    #     state: after
 
-    - name: enforce delay after failed login on terminal for su
-      pamd:
-        name: su
-        type: auth
-        control: required
-        module_path: pam_faillock.so
-        new_type: auth
-        new_control: optional
-        new_module_path: pam_faildelay.so
-        module_arguments:
-          - "delay={{ hardening_pam_fail_delay }}"
-        state: after
+    # - name: enforce delay after failed login on terminal for su
+    #   pamd:
+    #     name: su
+    #     type: auth
+    #     control: required
+    #     module_path: pam_faillock.so
+    #     new_type: auth
+    #     new_control: optional
+    #     new_module_path: pam_faildelay.so
+    #     module_arguments:
+    #       - "delay={{ hardening_pam_fail_delay }}"
+    #     state: after
 
     - name: set global umask
       pamd:
@@ -126,8 +126,7 @@
       loop:
         - auth
         - password
-  when:
-    - ansible_os_family == "RedHat"
+  when: ansible_os_family == "RedHat"
 
 - name: pam configuration
   block:
@@ -144,7 +143,7 @@
           - "delay={{ hardening_pam_fail_delay }}"
         state: after
 
-    - name: lock user account after 10 failed login attempts
+    - name: lock user account after x failed login attempts
       pamd:
         name: common-auth
         type: auth
@@ -171,5 +170,4 @@
         module_arguments:
           - umask=0077
         state: before
-  when:
-    - ansible_os_family == "Debian"
+  when: ansible_os_family == "Debian"

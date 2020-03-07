@@ -46,12 +46,19 @@
   tags:
     - hardening_file_permissions
 
-- name: import blacklist_filesystems.yml
-  import_tasks: blacklist_filesystems.yml
+- name: import mount_filesystems.yml
+  import_tasks: mount_filesystems.yml
   become: true
-  when: hardening_enable_filesytem_module_configuration | bool
+  when: hardening_enable_mount_filesystems_configuration | bool
   tags:
-    - hardening_enable_filesytem_module
+    - hardening_enable_mount_filesystems
+
+- name: import sysctl.yml
+  import_tasks: sysctl.yml
+  become: true
+  when: hardening_enable_sysctl_configuration | bool
+  tags:
+    - hardening_enable_sysctl_configuration
 
 - name: import crypto_policy.yml
   import_tasks: crypto_policy.yml

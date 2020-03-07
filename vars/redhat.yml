@@ -9,10 +9,11 @@ hardening_file_perms_passwd:
   group: root
   mode: "0644"
 
-hardening_filesystem_package: kmod
+hardening_mount_filesystems_packages:
+  - kmod
 
-# Crypto setting to set systemwide default
-# cryptographic policies use FUTURE to get most secure
-# crypto settings.
+hardening_syctl_package: procps-ng
+
+# Crypto setting to set systemwide default cryptographic policies use FUTURE to get most secure crypto settings.
 # See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening
-hardening_crypto_policies: "FUTURE"
+hardening_crypto_policy: DEFAULT

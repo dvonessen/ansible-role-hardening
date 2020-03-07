@@ -1,5 +1,43 @@
 ---
-# file_permissions.yml
+# sysctl configuration file extends sysctl.conf
+__hardening_sysctl_conf: /etc/sysctl.d/10-hardening.conf
+
+__hardening_sysctl_kernel_parameters:
+  - name: fs.protected_symlinks
+    value: "1"
+    comment: ensure DAC on symlinks is configured
+  - name: fs.protected_hardlinks
+    value: "1"
+    comment: ensure DAC on hardlinks is configured
+  - name: kernel.dmesg_restrict
+    value: "1"
+    comment: restrict access to kernel message buffer output (dmesg)
+  - name: kernel.yama.ptrace_scope
+    value: "2"
+    comment: restrict access to ptrace
+  - name: kernel.kexec_load_disabled
+    value: "1"
+    comment: disable kernel image loading
+  - name: kernel.unprivileged_bpf_disabled
+    value: "1"
+    comment: disable access to bpf() syscall
+  - name: net.core.bpf_jit_harden
+    value: "2"
+    comment: harden operations to BPF JIT compiler
+  - name: kernel.core_pattern
+    value: "|/bin/false"
+    comment: disable storing core dumps
+  - name: kernel.perf_event_paranoid
+    value: "2"
+    comment: disable kernel profiling by users
+  - name: kernel.kptr_restrict
+    value: "1"
+    comment: restrict exposed kernel pointer addresses access
+  - name: kernel.randomize_va_space
+    value: "2"
+    comment: enable randomized layout of virtual address space
+
+  # file_permissions.yml
 __hardening_file_perms_bin_dirs:
   - /bin
   - /sbin
@@ -8,7 +46,8 @@ __hardening_file_perms_bin_dirs:
   - /usr/local/bin
   - /usr/local/sbin
 
-__hardening_filesystem_module_blacklist:
+# mount_filesystems.yml
+__hardening_mount_filesystems_blacklist:
   - adfs
   - affs
   - befs
