@@ -2,18 +2,23 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: vagrant
+  provider:
+    name: virtualbox
 lint: yamllint
 platforms:
-  - name: hardening_centos8
-    image: registry.gitlab.com/dvonessen/docker-ansible-nonroot-centos:8
-    pre_build_image: true
-  - name: hardening_debian10
-    image: registry.gitlab.com/dvonessen/docker-ansible-nonroot-debian:10
-    pre_build_image: true
-  - name: hardening_ubuntu1804
-    image: registry.gitlab.com/dvonessen/docker-ansible-nonroot-ubuntu:18.04
-    pre_build_image: true
+  - name: hardeningcentos8
+    box: centos/8
+    box_version: 1905.1
+    memory: 4096
+    cpus: 4
+    provision: True
+  - name: hardeningdebian10
+    box: debian/buster64
+    box_version: 10.3.0
+    memory: 4096
+    cpus: 4
+    provision: True
 provisioner:
   name: ansible
   config_options:
@@ -22,6 +27,6 @@ provisioner:
   lint:
     name: ansible-lint
 verifier:
-  name: testinfra
+  name: ansible
   lint:
     name: flake8
