@@ -1,6 +1,6 @@
 ---
 # sysctl configuration file extends sysctl.conf
-__hardening_sysctl_conf: /etc/sysctl.d/10-hardening.conf
+__hardening_sysctl_conf: /etc/sysctl.d/98-hardening.conf
 
 __hardening_sysctl_kernel_parameters:
   - name: fs.protected_symlinks

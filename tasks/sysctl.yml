@@ -5,7 +5,7 @@
     state: present
   become: true
 
-- name: ensure DAC on symlinks is configured
+- name: ensure certain kernel parameters are set
   sysctl:
     name: "{{ item.name }}"
     value: "{{ item.value }}"
