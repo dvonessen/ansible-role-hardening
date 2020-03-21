@@ -59,6 +59,7 @@ The role is devided into different parts:
 
 | Name                                    | Default | Description                                                         |
 | :-------------------------------------- | :-----: | ------------------------------------------------------------------- |
+| `hardening_enable_limits_configuration` |  true   | Enables/Disables kernel limits configuration.                       |
 | `hardening_limits_maxlogins_count_hard` |    5    | Sets the __hard__ limit for concurrent users and sessions per user. |
 | `hardening_limits_process_count_soft`   |   100   | Sets the __soft__ limit for per user process creation count.        |
 | `hardening_limits_process_count_hard`   |   500   | Sets the __hard__ limit for per user process creation count.        |

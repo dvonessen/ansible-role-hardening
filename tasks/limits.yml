@@ -6,7 +6,6 @@
     mode: 0755
     path: /etc/security/limits.d
     state: directory
-  notify: reboot system
 
 - name: set limits
   pam_limits:

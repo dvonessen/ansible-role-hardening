@@ -47,6 +47,7 @@ hardening_user_admin_group: admins
 
 # limits.yml
 # Sets the soft and hard limit for processes per user
+hardening_enable_limits_configuration: true
 hardening_limits_maxlogins_count_hard: 5
 hardening_limits_process_count_soft: 100
 hardening_limits_process_count_hard: 500
