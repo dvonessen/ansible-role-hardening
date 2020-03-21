@@ -36,7 +36,7 @@
   block:
     - name: find world writable directories
       shell:
-        cmd: 'find / -type d -perm /o=w -print -o \( -path /dev -or -path /sys -or -path /proc \) -prune'
+        cmd: 'find / -type d -perm /o=w -print -o \( -path /dev -or -path /sys -or -path /proc -or -path /var/tmp \) -prune'
       register: __found_world_writeable_directories
       changed_when: false
       ignore_errors: true
@@ -102,6 +102,38 @@
         mode: og-w
         state: file
       loop: "{{ __found_system_libraries_perm_not_root.stdout_lines }}"
+
+- name: ensure home directory files and directories does not have more permissions than 0750
+  block:
+    - name: find files in /home that do have more permissions than 0750
+      shell:
+        cmd: "find /home/*/ -type f -mindepth 1 -perm /027"
+      register: __found_home_files
+      changed_when: false
+      ignore_errors: true
+
+    - name: set correct permission to home directory files
+      file:
+        path: "{{ item }}"
+        owner: root
+        mode: g-w,o-rwx
+        state: file
+      loop: "{{ __found_home_files.stdout_lines }}"
+
+    - name: find directories in  /home that do have more permissions than 0750
+      shell:
+        cmd: "find /home/*/ -type d -mindepth 1 -perm /027"
+      register: __found_home_directories
+      changed_when: false
+      ignore_errors: true
+
+    - name: set correct permission to home directory files and directories
+      file:
+        path: "{{ item }}"
+        owner: root
+        mode: g-w,o-rwx
+        state: directory
+      loop: "{{ __found_home_directories.stdout_lines }}"
 
 - name: change su perms to only be accessible by root
   file:
