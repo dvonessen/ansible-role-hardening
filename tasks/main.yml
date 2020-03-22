@@ -25,12 +25,12 @@
   tags:
     - hardening_pam
 
-- name: import login_defs.yml
-  import_tasks: login_defs.yml
+- name: import login.yml
+  import_tasks: login.yml
   become: true
-  when: hardening_enable_login_defs_configuration | bool
+  when: hardening_enable_login_configuration | bool
   tags:
-    - hardening_login_defs
+    - hardening_login
 
 - name: import limits.yml
   import_tasks: limits.yml

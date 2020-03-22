@@ -9,6 +9,9 @@ __hardening_sysctl_kernel_parameters:
   - name: fs.protected_hardlinks
     value: "1"
     comment: ensure DAC on hardlinks is configured
+  - name: fs.suid_dumpable=0
+    value: "0"
+    comment: disable core dumps for SUID programs
   - name: kernel.dmesg_restrict
     value: "1"
     comment: restrict access to kernel message buffer output (dmesg)
@@ -100,3 +103,4 @@ __hardening_mount_filesystems_blacklist:
 __hardening_disabled_services:
   - autofs.service
   - debug-shell.service
+  - systemd-coredump@.service

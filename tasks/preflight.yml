@@ -1,15 +1,15 @@
 ---
 - name: check if GID_MIN is smaller than GID_MAX
   assert:
-    that: hardening_login_defs_gid_min < 60000
+    that: hardening_login_gid_min < 60000
     fail_msg: >
-      hardening_login_defs_gid_min must be smaller
-      than hardening_login_defs_gid_max
+      hardening_login_gid_min must be smaller
+      than hardening_login_gid_max
 
 - name: check if PASS_MIN_DAYS is smaller than PASS_MAX_DAYS
   assert:
     that:
-      hardening_login_defs_pass_min_days < hardening_login_defs_pass_max_days
+      hardening_login_pass_min_days < hardening_login_pass_max_days
     fail_msg: >
       hardening_login_def_pass_min_days must be smaller
       than hardening_login_def_pass_max_days
