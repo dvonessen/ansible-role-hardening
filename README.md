@@ -21,9 +21,10 @@ The role is devided into different parts:
 
 ### Systemwide
 
-| Name                      | Default | Description                                                                    |
-| :------------------------ | :-----: | ------------------------------------------------------------------------------ |
-| `hardenings_system_umask` |  0077   | Used by different tasks to set the umask. E.g. PAMs pam_umask.so or login.defs |
+| Name                       | Default | Description                                                                    |
+| :------------------------- | :-----: | ------------------------------------------------------------------------------ |
+| `hardenings_system_umask`  |  0077   | Used by different tasks to set the umask. E.g. PAMs pam_umask.so or login.defs |
+| `hardening_system_timeout` |  1800   | Default timeout for system SHELL if no input is given in seconds.              |
 
 ### PAM
 

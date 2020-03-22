@@ -1,6 +1,7 @@
 ---
 # Systemwide variables
 hardening_system_umask: "0077"
+hardening_system_timeout: 1800
 
 # pam.yml variables
 hardening_enable_pam_configuration: true
