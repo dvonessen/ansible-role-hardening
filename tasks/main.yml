@@ -69,6 +69,13 @@
   tags:
     - hardening_enable_crypto_policy_module
 
+- name: import services.yml
+  import_tasks: services.yml
+  when:
+    - hardening_enable_services_configuration | bool
+  tags:
+    - hardening_enable_services_module
+
 # - name: import user.yml
 #   import_tasks: user.yml
 #   become: true

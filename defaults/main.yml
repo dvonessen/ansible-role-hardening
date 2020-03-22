@@ -65,3 +65,7 @@ hardening_enable_sysctl_configuration: true
 
 # cryptop_policy.yml
 hardening_enable_crypto_policy_module_configuration: true
+
+# services.yml
+hardening_enable_services_configuration: true
+hardening_whitelist_services: []

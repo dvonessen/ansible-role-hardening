@@ -1,0 +1,45 @@
+---
+- name: configure systemd
+  block:
+    - name: ensure systemd system.conf.d directory exists
+      file:
+        owner: root
+        group: root
+        mode: 0755
+        path: /etc/systemd/system.conf.d
+        state: directory
+      become: true
+
+    - name: configure systemd
+      template:
+        src: etc/systemd/system.conf.d/hardening.conf
+        dest: /etc/systemd/system.conf.d/hardening.conf
+        owner: root
+        group: root
+        mode: 0644
+      become: true
+
+- name: configure system services
+  block:
+    - name: gathering all services on the system
+      service_facts:
+
+    - name: disable and mask unwanted services
+      systemd:
+        name: "{{ item }}"
+        state: stopped
+        enabled: no
+        masked: yes
+      loop: "{{ __hardening_disabled_services | difference(hardening_whitelist_services) }}"
+      when: item in ansible_facts.services
+      become: true
+
+    - name: disable and mask special systemd units
+      systemd:
+        name: "{{ item }}"
+        state: stopped
+        enabled: no
+        masked: yes
+      loop:
+        - ctrl-alt-del.target
+      become: true

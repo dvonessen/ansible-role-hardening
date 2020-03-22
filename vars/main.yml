@@ -96,3 +96,7 @@ __hardening_mount_filesystems_blacklist:
   - ubifs
   - udf
   - ufs
+
+__hardening_disabled_services:
+  - autofs.service
+  - debug-shell.service

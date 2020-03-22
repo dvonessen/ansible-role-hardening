@@ -89,6 +89,12 @@ This playbook will set the systemwide crypto policy.
 | `hardening_enable_crypto_policy_module_configuration` |  true   | Enables/Disables crypto policy configuration. |
 | `hardening_crypto_policy`                             | DEFAULT | Set by default the crypto policy.             |
 
+### Services
+
+| Name                                      | Default | Description                              |
+| :---------------------------------------- | :-----: | ---------------------------------------- |
+| `hardening_enable_services_configuration` |  true   | Enables/Disables services configuration. |
+| `hardening_whitelist_services`            |   []    | List of services to whitelist.           |
 
 ### User
 
