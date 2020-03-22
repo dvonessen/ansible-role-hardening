@@ -8,6 +8,17 @@
     mode: 0644
   become: true
 
+- name: configure /etc/motd and /etc/issue
+  template:
+    src: etc/issue.j2
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - /etc/issue
+    # - /etc/motd
+
 - name: configure hardening features in profile.d
   template:
     src: etc/profile.d/hardening.sh
