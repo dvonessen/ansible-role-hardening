@@ -28,6 +28,38 @@
   when: ansible_os_family == "RedHat"
   become: true
 
+- name: configure motd and issue
+  block:
+    - name: check if issue.net exists
+      stat:
+        path: /etc/issue.net
+      register: __hardening_login_issue_net
+
+    - name: delete issue.net
+      file:
+        path: /etc/issue.net
+        state: absent
+      when: __hardening_login_issue_net.stat.exists | bool
+
+    - name: check if update-motd.d exists
+      stat:
+        path: /etc/update-motd.d
+      register: __hardening_login_update_motd_d
+
+    - name: find all files in update-motd.d
+      shell:
+        cmd: "find /etc/update-motd.d -mindepth 1"
+      register: __hardening_login_found_update_motd_d_files
+      when: __hardening_login_update_motd_d.stat.exists | bool
+      changed_when: false
+
+    - name: remove all files from update-motd.d
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop: "{{ __hardening_login_found_update_motd_d_files.stdout_lines }}"
+      when: __hardening_login_found_update_motd_d_files.changed | bool
+
 - name: configure /etc/motd and /etc/issue
   template:
     src: "etc/{{ item }}.j2"

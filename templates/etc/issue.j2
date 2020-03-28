@@ -1,1 +1,17 @@
+{% if hardening_login_issue is defined and hardening_login_issue | length > 0 %}
 {{ hardening_login_issue }}
+{% else %}
+********************************************************************
+*                                                                  *
+* This system is for the use of authorized users only.  Usage of   *
+* this system may be monitored and recorded by system personnel.   *
+*                                                                  *
+* Anyone using this system expressly consents to such monitoring   *
+* and is advised that if such monitoring reveals possible          *
+* evidence of criminal activity, system personnel may provide the  *
+* evidence from such monitoring to law enforcement officials.      *
+********************************************************************
+{{"{} {} {} {}\nHost/IP: {} {}".format(
+ansible_distribution, ansible_distribution_release, ansible_distribution_version,
+ansible_architecture, ansible_fqdn, ansible_default_ipv4.address )}}
+{% endif %}
