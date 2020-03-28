@@ -1,19 +1,31 @@
 ---
 - name: configure systemd
   block:
-    - name: ensure systemd system.conf.d directory exists
+    - name: ensure systemd  configuration directories exists
       file:
         owner: root
         group: root
         mode: 0755
-        path: /etc/systemd/system.conf.d
+        path: "{{ item }}"
         state: directory
+      loop:
+        - /etc/systemd/system.conf.d
+        - /etc/systemd/coredump.conf.d
       become: true
 
-    - name: configure systemd
+    - name: configure systemd daemon
       template:
-        src: etc/systemd/system.conf.d/hardening.conf
+        src: etc/systemd/system.conf.d/hardening.conf.j2
         dest: /etc/systemd/system.conf.d/hardening.conf
+        owner: root
+        group: root
+        mode: 0644
+      become: true
+
+    - name: configure systemd coredump
+      template:
+        src: etc/systemd/coredump.conf.d/hardening.conf.j2
+        dest: /etc/systemd/coredump.conf.d/hardening.conf
         owner: root
         group: root
         mode: 0644
