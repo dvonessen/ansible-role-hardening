@@ -9,7 +9,7 @@ __hardening_sysctl_kernel_parameters:
   - name: fs.protected_hardlinks
     value: "1"
     comment: ensure DAC on hardlinks is configured
-  - name: fs.suid_dumpable=0
+  - name: fs.suid_dumpable
     value: "0"
     comment: disable core dumps for SUID programs
   - name: kernel.dmesg_restrict
@@ -100,7 +100,12 @@ __hardening_mount_filesystems_blacklist:
   - udf
   - ufs
 
+# services.yml
 __hardening_disabled_services:
   - autofs.service
   - debug-shell.service
-  - systemd-coredump@.service
+
+# packages.yml
+__hardening_add_os_packages: []
+
+__hardening_remove_os_packages: []
