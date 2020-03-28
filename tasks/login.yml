@@ -8,17 +8,6 @@
     mode: 0644
   become: true
 
-- name: configure /etc/motd and /etc/issue
-  template:
-    src: etc/issue_motd.j2
-    dest: "{{ item }}"
-    owner: root
-    group: root
-    mode: 0644
-  loop:
-    - /etc/issue
-    - /etc/motd
-
 - name: configure hardening features in profile.d
   template:
     src: etc/profile.d/hardening.sh.j2
@@ -38,3 +27,14 @@
     replace: '\1umask {{ hardening_system_umask }}'
   when: ansible_os_family == "RedHat"
   become: true
+
+- name: configure /etc/motd and /etc/issue
+  template:
+    src: "etc/{{ item }}.j2"
+    dest: "/etc/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - issue
+    - motd
