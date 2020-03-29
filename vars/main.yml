@@ -104,8 +104,3 @@ __hardening_mount_filesystems_blacklist:
 __hardening_disabled_services:
   - autofs.service
   - debug-shell.service
-
-# packages.yml
-__hardening_add_os_packages: []
-
-__hardening_remove_os_packages: []
