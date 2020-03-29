@@ -4,7 +4,7 @@
     - name: ensure /etc/yum.conf and /etc/dnf/dnf.conf exits
       file:
         path: "{{ item }}"
-        state: present
+        state: file
         owner: root
         group: root
         mode: 0644
@@ -37,7 +37,7 @@
 
     - name: check GPG key for local pakages
       ini_file:
-        des: "{{ item }}"
+        dest: "{{ item }}"
         section: main
         option: localpkg_gpgcheck
         value: "1"
