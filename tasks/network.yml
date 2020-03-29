@@ -1,0 +1,34 @@
+---
+- name: disable NetworkManger resolv.conf management
+  ini_file:
+    path: /etc/NetworkManager/NetworkManager.conf
+    section: main
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - option: dns
+      value: none
+    - option: rc-managed
+      value: unmanaged
+  become: true
+  when: (hardening_network_search_bases | length > 0 or hardening_network_dns_servers | length > 0)
+  notify: restart NetworkManager
+
+- name: configure resolve.conf dns servers
+  template:
+    src: etc/resolv.conf.j2
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: (hardening_network_search_bases | length > 0  or hardening_network_dns_servers | length > 0)
+  become: true
+
+- name: disable zeroconf configuration
+  lineinfile:
+    path: /etc/sysconfig/network
+    line: "NOZEROCONF=yes"
+    state: present
+  become: true
+  when: ansible_os_family == "RedHat"

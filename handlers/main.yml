@@ -1,4 +1,9 @@
 ---
+- name: restart NetworkManager
+  systemd:
+    name: NetworkManager
+    state: restarted
+
 - name: reboot system
   reboot:
   when: ansible_virtualization_type | lower != "docker"

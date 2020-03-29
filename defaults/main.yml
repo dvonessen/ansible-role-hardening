@@ -83,7 +83,14 @@ hardening_whitelist_services: []
 # yum.yml
 hardening_enable_yum_configuration: true
 
-
 # packages.yml
 hardening_add_os_packages_blacklist: []
 hardening_remove_os_packages_blacklist: []
+
+# network.yml
+hardening_enable_network_configuration: true
+hardening_network_dns_servers: []
+#  - 1.2.3.4
+#  - 5.6.7.8
+hardening_network_dns_search_bases: []
+#  - example.com

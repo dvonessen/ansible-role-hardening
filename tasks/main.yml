@@ -84,6 +84,13 @@
   tags:
     - hardening_yum
 
+- name: import network.yml
+  import_tasks: network.yml
+  when:
+    - hardening_enable_network_configuration | bool
+  tags:
+    - hardening_network
+
 # - name: import user.yml
 #   import_tasks: user.yml
 #   become: true

@@ -59,8 +59,8 @@ The role is devided into different parts:
 | `hardening_login_useradd_default_shell` |                              /bin/bash                               | The SHELL variable specifies the default login shell on your system.                  |
 | `hardening_login_useradd_set_inactive`  |                                  30                                  | The number of days after a password expires until the account is permanently disabled |
 | `hardening_login_useradd_extras`        |                                  {}                                  | Dictionary to use for extra arguments to setup `useradd`. See `man 8 useradd`         |
-| `hardening_login_motd`                  |  Banner message. See (templates/etc/motd.j2)[templates/etc/motd.j2]  | Fulltext message for `/etc/motd`.                                                     |
-| `hardening_login_issue`                 | Banner message. See (templates/etc/issue.j2)[templates/etc/issue.j2] | Fulltext message for `/etc/issue`.                                                    |
+| `hardening_login_motd`                  |  Banner message. See [templates/etc/motd.j2](templates/etc/motd.j2)  | Fulltext message for `/etc/motd`.                                                     |
+| `hardening_login_issue`                 | Banner message. See [templates/etc/issue.j2](templates/etc/issue.j2) | Fulltext message for `/etc/issue`.                                                    |
 
 ### Limits
 
@@ -102,6 +102,14 @@ This playbook will set the systemwide crypto policy.
 | `hardening_enable_services_configuration` |  true   | Enables/Disables services configuration. |
 | `hardening_whitelist_services`            |   []    | List of services to whitelist.           |
 
+### Network
+
+| Name                                     | Default | Description                                           |
+| :--------------------------------------- | :-----: | ----------------------------------------------------- |
+| `hardening_enable_network_configuration` |  true   | Enables/Disables network configuration.               |
+| `hardening_network_dns_servers`          |   []    | List of DNS server IP addresses in `/etc/resolv.conf` |
+| `hardening_network_search_bases`         |   []    | List of DNS search base entries in `/etc/resolv.conf` |
+
 ### User
 
 | Name                                                  | Default | Description                                                                         |
@@ -111,10 +119,6 @@ This playbook will set the systemwide crypto policy.
 | `hardening_user_admin_group`                          | admins  | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
 | `hardening_user_admin_user_ssh_pub_keys` __required__ |   []    | List of public SSH keys to place into administrativ account.                        |
 
-### Reboot
-
-The system will be rebooted if anything has changed
-
 ## Tags
 
 | Name                         | Description                              |
@@ -123,6 +127,7 @@ The system will be rebooted if anything has changed
 | `hardening_login`            | Includes `login.defs` configuration.     |
 | `hardening_limits`           | Includes kernel limits configuration.    |
 | `hardening_file_permissions` | Includes file permissions configuration. |
+| `hardening_network`          | Includes network configuration.          |
 | `hardening_user`             | Creation of administrativ user.          |
 
 ## Dependencies

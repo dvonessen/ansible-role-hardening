@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+{% for search_base in hardening_network_search_bases -%}
+search {{ search_base }}
+{% endfor %}
+{%- for server in hardening_network_dns_servers -%}
+nameserver {{ server }}
+{% endfor %}
