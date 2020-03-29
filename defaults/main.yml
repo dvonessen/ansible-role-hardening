@@ -34,11 +34,18 @@ hardening_login_defs_log_ok_logins: "yes"
 hardening_login_defs_pass_min_days: 7
 hardening_login_defs_pass_max_days: 180
 hardening_login_defs_pass_warn_age: 14
+hardening_login_defs_pass_min_length: 32
 hardening_login_defs_sulog_file: "/var/log/sulog.log"
 
 hardening_login_defs_extra: {}
 #  CHFN_RESTRICT: rwh
 #  CONSOLE_GROUPS: "floppy:audio:cdrom"
+
+hardening_login_useradd_default_shell: /bin/bash
+hardening_login_useradd_set_inactive: 30
+hardening_login_useradd_extras: {}
+  # GROUP: 100
+  # HOME: /home
 
 # Configure /etc/issue|motd
 hardening_login_issue: ""

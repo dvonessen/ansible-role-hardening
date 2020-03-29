@@ -8,6 +8,15 @@
     mode: 0644
   become: true
 
+- name: configure useradd defaults
+  template:
+    src: etc/default/useradd.j2
+    dest: /etc/default/useradd
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
 - name: configure hardening features in profile.d
   template:
     src: etc/profile.d/hardening.sh.j2

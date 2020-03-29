@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+# useradd defaults file
+INACTIVE={{ hardening_login_useradd_set_inactive }}
+SHELL={{ hardening_login_useradd_default_shell }}
+
+{% if hardening_login_useradd_extras | length > 0 %}
+{% for key, value in hardening_login_useradd_extras.items() %}
+{{ key }}={{ value }}
+{% endfor %}
+{% endif %}
