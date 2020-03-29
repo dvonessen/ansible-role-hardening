@@ -32,3 +32,13 @@
     state: present
   become: true
   when: ansible_os_family == "RedHat"
+
+- name: blacklist uncommon network protocols
+  template:
+    src: etc/modprobe.d/blacklist_net_protocols.conf.j2
+    dest: /etc/modprobe.d/blacklist_net_protocols.conf
+    owner: root
+    group: root
+    mode: 0640
+  become: true
+  notify: reboot system

@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+
+# Disabling uncommon network protocols
+{% for net_proto in __hardening_network_blacklist_uncommon_net_protocols |
+difference(hardening_hardening_network_uncommon_net_protocols_whitelist) %}
+install {{ net_proto }} /bin/true
+{% endfor %}
