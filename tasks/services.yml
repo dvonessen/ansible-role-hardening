@@ -33,9 +33,6 @@
 
 - name: configure system services
   block:
-    - name: gathering all services on the system
-      service_facts:
-
     - name: disable and mask unwanted services
       systemd:
         name: "{{ item }}"

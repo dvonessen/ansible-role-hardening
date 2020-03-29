@@ -1,8 +1,10 @@
 ---
 - name: restart NetworkManager
   systemd:
-    name: NetworkManager
+    name: NetworkManager.service
     state: restarted
+  become: true
+  when: "'NetworkManager.service' in ansible_facts.services"
 
 - name: reboot system
   reboot:
