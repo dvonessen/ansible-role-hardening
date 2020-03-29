@@ -76,6 +76,14 @@
   tags:
     - hardening_enable_services_module
 
+- name: import yum.yml
+  import_tasks: yum.yml
+  when:
+    - hardening_enable_yum_configuration | bool
+    - ansible_os_family | lower == "redhat"
+  tags:
+    - hardening_yum
+
 # - name: import user.yml
 #   import_tasks: user.yml
 #   become: true

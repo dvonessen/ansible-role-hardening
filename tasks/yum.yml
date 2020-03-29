@@ -1,0 +1,63 @@
+---
+- name: gloabl yum/dnf configuration
+  block:
+    - name: ensure /etc/yum.conf and /etc/dnf/dnf.conf exits
+      file:
+        path: "{{ item }}"
+        state: present
+        owner: root
+        group: root
+        mode: 0644
+      loop:
+        - /etc/yum.conf
+        - /etc/dnf/dnf.conf
+      become: true
+
+    - name: ensure GPG check is globally activated for yum/dnf
+      ini_file:
+        dest: "{{ item }}"
+        section: main
+        option: gpgcheck
+        value: "1"
+      loop:
+        - /etc/yum.conf
+        - /etc/dnf/dnf.conf
+      become: true
+
+    - name: ensure yum removes previous package versions
+      ini_file:
+        dest: "{{ item }}"
+        section: main
+        option: clean_requirements_on_remove
+        value: "1"
+      loop:
+        - /etc/yum.conf
+        - /etc/dnf/dnf.conf
+      become: true
+
+    - name: check GPG key for local pakages
+      ini_file:
+        des: "{{ item }}"
+        section: main
+        option: localpkg_gpgcheck
+        value: "1"
+      loop:
+        - /etc/yum.conf
+        - /etc/dnf/dnf.conf
+      become: true
+
+- name: ensure for all *.repo files GPG check is enabled
+  block:
+    - name: find all repo files in /etc/yum.repos.d/
+      shell:
+        cmd: "find /etc/yum.repos.d/ -mindepth 1"
+      changed_when: false
+      register: __hardening_yum_repo_files
+
+    - name: enable GPG check for all entries in repo files
+      replace:
+        path: "{{ item }}"
+        regexp: '(^gpgcheck[\s]*=[\s]*)0'
+        replace: '\g<1>1'
+      loop: "{{ __hardening_yum_repo_files.stdout_lines}}"
+      become: true

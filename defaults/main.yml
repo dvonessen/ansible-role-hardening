@@ -80,6 +80,10 @@ hardening_enable_crypto_policy_module_configuration: true
 hardening_enable_services_configuration: true
 hardening_whitelist_services: []
 
+# yum.yml
+hardening_enable_yum_configuration: true
+
+
 # packages.yml
 hardening_add_os_packages_blacklist: []
 hardening_remove_os_packages_blacklist: []
