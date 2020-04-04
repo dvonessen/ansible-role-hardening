@@ -1,32 +1,33 @@
 ---
-# Systemwide variables
-hardening_system_umask: "0077"
-hardening_system_timeout: 1800
+# # # # # #
+# special #
+# # # # # #
+hardening_allow_reboot: true
 
-# pam.yml variables
-hardening_enable_pam_configuration: true
+# # # # # #
+# pam.yml #
+# # # # # #
+hardening_pam: true
 hardening_pam_failed_logins: 4
 hardening_pam_unlock_time: 60
 hardening_pam_fail_delay: 10000000
 
-# login.yml variables
-hardening_enable_login_configuration: true
-# login.yml setup for login.defs file
+# # # # # # #
+# login.yml #
+# # # # # # #
+hardening_login: true
+hardening_login_umask: "0077"
+hardening_login_timeout: 1800
+hardening_login_issue: ""
+hardening_login_motd: ""
 hardening_login_defs_mail_dir: "/var/mail"
 hardening_login_defs_create_home: "yes"
 hardening_login_defs_default_home: "no"
-
-# Prevents the creation of home directories with
-# read or write permissions to the directory group or others
-hardening_login_defs_umask: "{{ hardening_system_umask }}"
+hardening_login_defs_umask: "{{ hardening_login_umask }}"
 hardening_login_defs_env_paths: []
 #  - $HOME/bin
-
-# Maximum is statically assigend to 60000
 hardening_login_defs_uid_min: 10000
 hardening_login_defs_gid_min: 10000
-
-# Max of sys uid and gid is (uid|gid)_min-1
 hardening_login_defs_sys_uid_min: 1000
 hardening_login_defs_sys_gid_min: 1000
 
@@ -44,54 +45,169 @@ hardening_login_defs_extra: {}
 hardening_login_useradd_default_shell: /bin/bash
 hardening_login_useradd_set_inactive: 30
 hardening_login_useradd_extras: {}
-  # GROUP: 100
-  # HOME: /home
+#  GROUP: 100
+#  HOME: /home
 
-# Configure /etc/issue|motd
-hardening_login_issue: ""
-hardening_login_motd: ""
+# # # # # # # #
+# limits.yml  #
+# # # # # # # #
+hardening_limits: true
+hardening_limits_conf_file: /etc/security/limits.d/98-hardening.conf
+hardening_limits_conf:
+  - comment: limit core dumps for all user (hard)
+    domain: "*"
+    limit_item: core
+    limit_type: hard
+    value: 0
+  - comment: limit concurrent users and sessions per user
+    domain: "*"
+    limit_item: maxlogins
+    limit_type: hard
+    value: 5
+  - comment: limits process count per user (soft)
+    domain: "*"
+    limit_item: nproc
+    limit_type: soft
+    value: 100
+  - comment: limits process count per user (hard)
+    domain: "*"
+    limit_item: nproc
+    limit_type: hard
+    value: 500
 
-# user.yml variables
-hardening_enable_user_configuration: true
-hardening_user_admin_user: admin
-hardening_user_admin_group: admins
+# # # # # # # #
+# sysctl.yml  #
+# # # # # # # #
+hardening_sysctl: true
+hardening_sysctl_conf: /etc/sysctl.d/98-hardening.conf
+hardening_sysctl_kernel_parameters:
+  - name: fs.protected_symlinks
+    value: "1"
+    comment: ensure DAC on symlinks is configured
+  - name: fs.protected_hardlinks
+    value: "1"
+    comment: ensure DAC on hardlinks is configured
+  - name: fs.suid_dumpable
+    value: "0"
+    comment: disable core dumps for SUID programs
+  - name: kernel.dmesg_restrict
+    value: "1"
+    comment: restrict access to kernel message buffer output (dmesg)
+  - name: kernel.yama.ptrace_scope
+    value: "2"
+    comment: restrict access to ptrace
+  - name: kernel.kexec_load_disabled
+    value: "1"
+    comment: disable kernel image loading
+  - name: kernel.unprivileged_bpf_disabled
+    value: "1"
+    comment: disable access to bpf() syscall
+  - name: net.core.bpf_jit_harden
+    value: "2"
+    comment: harden operations to BPF JIT compiler
+  - name: kernel.core_pattern
+    value: "|/bin/false"
+    comment: disable storing core dumps
+  - name: kernel.perf_event_paranoid
+    value: "2"
+    comment: disable kernel profiling by users
+  - name: kernel.kptr_restrict
+    value: "1"
+    comment: restrict exposed kernel pointer addresses access
+  - name: kernel.randomize_va_space
+    value: "2"
+    comment: enable randomized layout of virtual address space
+  - name: net.ipv4.conf.all.send_redirects
+    value: "0"
+    comment: disable sending ICMP redirects on all IPv4 interfaces
+  - name: net.ipv4.ip_forward
+    value: "0"
+    commen: disable forwarding IP packets
 
-# limits.yml
-# Sets the soft and hard limit for processes per user
-hardening_enable_limits_configuration: true
-hardening_limits_maxlogins_count_hard: 5
-hardening_limits_process_count_soft: 100
-hardening_limits_process_count_hard: 500
+# # # # # # # # # # # # #
+# file_permissions.yml  #
+# # # # # # # # # # # # #
+hardening_file_perms: true
+hardening_file_perms_bin_dirs:
+  - /bin
+  - /sbin
+  - /usr/bin
+  - /usr/sbin
+  - /usr/local/bin
+  - /usr/local/sbin
 
-# file_permissions.yml
-hardening_enable_file_perms_configuration: true
-
-# mount_filesystems.yml
-hardening_enable_mount_filesystems_configuration: true
+# # # # # # # # # # # # #
+# mount_filesystems.yml #
+# # # # # # # # # # # # #
+hardening_mount_filesystems: true
 hardening_mount_filesystems_whitelist: []
+hardening_mount_filesystems_blacklist:
+  - adfs
+  - affs
+  - befs
+  - bfs
+  - cramfs
+  - efs
+  - erofs
+  - exofs
+  - f2fs
+  - freevxfs
+  - hfs
+  - hfsplus
+  - hpfs
+  - jffs2
+  - jfs
+  - minix
+  - nilfs2
+  - qnx4
+  - qnx6
+  - squashfs
+  - sysv
+  - ubifs
+  - udf
+  - ufs
 
-# sysctl.yml
-hardening_enable_sysctl_configuration: true
+# # # # # # # # # # # #
+# cryptop_policy.yml  #
+# # # # # # # # # # # #
+hardening_crypto_policy: true
 
-# cryptop_policy.yml
-hardening_enable_crypto_policy_module_configuration: true
-
-# services.yml
-hardening_enable_services_configuration: true
+# # # # # # # # #
+# services.yml  #
+# # # # # # # # #
+hardening_services: true
 hardening_whitelist_services: []
+hardening_blacklist_services:
+  - autofs.service
+  - debug-shell.service
 
-# yum.yml
-hardening_enable_yum_configuration: true
+# # # # # #
+# yum.yml #
+# # # # # #
+hardening_yum: true
 
-# packages.yml
-hardening_add_os_packages_blacklist: []
-hardening_remove_os_packages_blacklist: []
-
-# network.yml
-hardening_enable_network_configuration: true
+# # # # # # # #
+# network.yml #
+# # # # # # # #
+hardening_network: true
 hardening_network_dns_servers: []
 #  - 1.2.3.4
 #  - 5.6.7.8
 hardening_network_dns_search_bases: []
 #  - example.com
-hardening_hardening_network_uncommon_net_protocols_whitelist: []
+hardening_network_whitelist_net_protocols: []
+hardening_network_blacklist_net_protocols:
+  - atm
+  - tipc
+  - rds
+  - dccp
+  - sctp
+  - can
+  - firewire-core
+
+# # # # # # #
+# user.yml  #
+# # # # # # #
+hardening_user: true
+hardening_user_admin_user: admin
+hardening_user_admin_group: admins

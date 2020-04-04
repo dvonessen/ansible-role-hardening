@@ -5,23 +5,23 @@
       find:
         paths: /boot
         pattern: "*System.map*"
-      register: __found_system_map_files
+      register: __hardening_system_map_files
 
-    - name: reset permissions of System.map files
+    - name: ensure System.map file are only accessible by root user
       file:
         path: "{{ item.path }}"
         owner: root
         group: root
         mode: 0600
-      loop: "{{ __found_system_map_files.files }}"
-      when: __found_system_map_files.files | length > 0
+      loop: "{{ __hardening_system_map_files.files }}"
+      when: __hardening_system_map_files.files | length > 0
 
 - name: ensure no world writable files exists
   block:
     - name: find world writable files
       shell:
-        cmd: 'find / -type f -perm /o=w -print -o \( -path /dev -or -path /sys -or -path /proc -or -path {{ __hardening_file_perms_bin_dirs | list | join(" -or -path ") }} \) -prune'
-      register: __found_world_writeable_files
+        cmd: 'find / -type f -perm /o=w -print -o \( -path /dev -or -path /sys -or -path /proc -or -path {{ hardening_file_perms_bin_dirs | list | join(" -or -path ") }} \) -prune'
+      register: __hardening_world_writeable_files
       changed_when: false
       ignore_errors: true
 
@@ -30,14 +30,14 @@
         path: "{{ item }}"
         mode: o-w
         state: file
-      loop: "{{ __found_world_writeable_files.stdout_lines }}"
+      loop: "{{ __hardening_world_writeable_files.stdout_lines }}"
 
 - name: ensure on world writable directories SGID is set
   block:
     - name: find world writable directories
       shell:
         cmd: 'find / -type d -perm /o=w -print -o \( -path /dev -or -path /sys -or -path /proc -or -path /var/tmp \) -prune'
-      register: __found_world_writeable_directories
+      register: __hardening_world_writeable_dirs
       changed_when: false
       ignore_errors: true
 
@@ -46,14 +46,14 @@
         path: "{{ item }}"
         mode: +t
         state: directory
-      loop: "{{ __found_world_writeable_directories.stdout_lines }}"
+      loop: "{{ __hardening_world_writeable_dirs.stdout_lines }}"
 
 - name: ensure system binaries are not writeable by group or world
   block:
     - name: find files in bin directories with group or other write permissions
       shell:
-        cmd: "find -L {{ __hardening_file_perms_bin_dirs | list  | join(' ') }} -type f -perm /go+w"
-      register: __found_group_other_write_bin_files
+        cmd: "find -L {{ hardening_file_perms_bin_dirs | list  | join(' ') }} -type f -perm /go+w"
+      register: __hardening_group_other_write_bin_files
       changed_when: false
       ignore_errors: true
 
@@ -62,7 +62,7 @@
         path: "{{ item }}"
         mode: go-w
         state: file
-      loop: "{{ __found_group_other_write_bin_files.stdout_lines }}"
+      loop: "{{ __hardening_group_other_write_bin_files.stdout_lines }}"
 
 - name: ensure account files have correct permissions
   block:
@@ -93,7 +93,7 @@
         cmd: "find /lib* /usr/lib* -type f -perm /go=w -o -type f -not -user root"
       changed_when: false
       ignore_errors: true
-      register: __found_system_libraries_perm_not_root
+      register: __hardening_system_libraries_perm_not_root
 
     - name: set correct owner and permission to system libraries
       file:
@@ -101,14 +101,14 @@
         owner: root
         mode: og-w
         state: file
-      loop: "{{ __found_system_libraries_perm_not_root.stdout_lines }}"
+      loop: "{{ __hardening_system_libraries_perm_not_root.stdout_lines }}"
 
 - name: ensure users home directories are not group writable
   block:
     - name: get list of all user home directories
       shell:
         cmd: "find /home -mindepth 1 -maxdepth 1 -type d"
-      register: __found_users_home
+      register: __hardening_users_home
       changed_when: false
       ignore_errors: true
 
@@ -117,14 +117,14 @@
         path: "{{ item }}"
         mode: g-w,o-rwx
         state: directory
-      loop: "{{ __found_users_home.stdout_lines }}"
+      loop: "{{ __hardening_users_home.stdout_lines }}"
 
-- name: ensure home directory files and directories does not have more permissions than 0750
+- name: ensure directories and files do not have more permissions than 0750 in home directory
   block:
     - name: find files in /home that do have more permissions than 0750
       shell:
         cmd: "find /home/*/ -type f -mindepth 1 -perm /027"
-      register: __found_home_files
+      register: __hardening_home_files
       changed_when: false
       ignore_errors: true
 
@@ -133,12 +133,12 @@
         path: "{{ item }}"
         mode: g-w,o-rwx
         state: file
-      loop: "{{ __found_home_files.stdout_lines }}"
+      loop: "{{ __hardening_home_files.stdout_lines }}"
 
     - name: find directories in  /home that do have more permissions than 0750
       shell:
         cmd: "find /home/*/ -type d -mindepth 1 -perm /027"
-      register: __found_home_directories
+      register: __hardening_home_directories
       changed_when: false
       ignore_errors: true
 
@@ -147,7 +147,7 @@
         path: "{{ item }}"
         mode: g-w,o-rwx
         state: directory
-      loop: "{{ __found_home_directories.stdout_lines }}"
+      loop: "{{ __hardening_home_directories.stdout_lines }}"
 
 - name: change su perms to only be accessible by root
   file:

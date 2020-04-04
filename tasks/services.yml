@@ -11,7 +11,6 @@
       loop:
         - /etc/systemd/system.conf.d
         - /etc/systemd/coredump.conf.d
-      become: true
 
     - name: configure systemd daemon
       template:
@@ -20,7 +19,6 @@
         owner: root
         group: root
         mode: 0644
-      become: true
 
     - name: configure systemd coredump
       template:
@@ -29,7 +27,6 @@
         owner: root
         group: root
         mode: 0644
-      become: true
 
 - name: configure system services
   block:
@@ -39,9 +36,8 @@
         state: stopped
         enabled: no
         masked: yes
-      loop: "{{ __hardening_disabled_services | difference(hardening_whitelist_services) }}"
+      loop: "{{ hardening_blacklist_services | difference(hardening_whitelist_services) }}"
       when: item in ansible_facts.services
-      become: true
 
     - name: disable and mask special systemd units
       systemd:
@@ -51,4 +47,3 @@
         masked: yes
       loop:
         - ctrl-alt-del.target
-      become: true

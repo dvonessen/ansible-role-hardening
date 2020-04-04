@@ -9,8 +9,7 @@ hardening_file_perms_passwd:
   group: root
   mode: "0644"
 
-hardening_mount_filesystems_packages:
-  - kmod
+hardening_mount_filesystems_packages: kmod
 
 hardening_syctl_package: procps-ng
 

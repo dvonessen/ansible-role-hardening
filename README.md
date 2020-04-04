@@ -19,31 +19,34 @@ The role is devided into different parts:
 
 ## Variables
 
-### Systemwide
+### Special
 
-| Name                       | Default | Description                                                                    |
-| :------------------------- | :-----: | ------------------------------------------------------------------------------ |
-| `hardenings_system_umask`  |  0077   | Used by different tasks to set the umask. E.g. PAMs pam_umask.so or login.defs |
-| `hardening_system_timeout` |  1800   | Default timeout for system SHELL if no input is given in seconds.              |
+| Name                     | Default | Description                                 |
+| :----------------------- | :-----: | ------------------------------------------- |
+| `hardening_allow_reboot` |  true   | Allows execution of `reboot system` handler |
 
 ### PAM
 
-| Name                                 | Default  | Description                                                      |
-| :----------------------------------- | :------: | ---------------------------------------------------------------- |
-| `hardening_enable_pam_configuration` |   true   | Enables/Disables PAM hardening.                                  |
-| `hardening_pam_failed_logins`        |    4     | Faild login tries before user account gets locked.               |
-| `hardening_pam_unlock_time`          |    60    | Seconds how long user account will be locked after n tries.      |
-| `hardening_pam_fail_delay`           | 10000000 | Milliseconds how long the delay is after failing authentication. |
+| Name                          | Default  | Description                                                      |
+| :---------------------------- | :------: | ---------------------------------------------------------------- |
+| `hardening_pam`               |   true   | Enables/Disables PAM hardening.                                  |
+| `hardening_pam_failed_logins` |    4     | Faild login tries before user account gets locked.               |
+| `hardening_pam_unlock_time`   |    60    | Seconds how long user account will be locked after n tries.      |
+| `hardening_pam_fail_delay`    | 10000000 | Milliseconds how long the delay is after failing authentication. |
 
 ### Login
 
 | Name                                    |                               Default                                | Description                                                                           |
 | :-------------------------------------- | :------------------------------------------------------------------: | ------------------------------------------------------------------------------------- |
-| `hardening_enable_login_configuration`  |                                 true                                 | Enables/Disables login.defs configurations.                                           |
+| `hardening_login`                       |                                 true                                 | Enables/Disables login.defs configurations.                                           |
+| `hardening_login_umask`                 |                                 0077                                 | Used by different tasks to set the umask. E.g. PAMs pam_umask.so or login.defs        |
+| `hardening_login_timeout`               |                                 1800                                 | Default timeout for system SHELL if no input is given in seconds.                     |
+| `hardening_login_motd`                  |  Banner message. See [templates/etc/motd.j2](templates/etc/motd.j2)  | Fulltext message for `/etc/motd`.                                                     |
+| `hardening_login_issue`                 | Banner message. See [templates/etc/issue.j2](templates/etc/issue.j2) | Fulltext message for `/etc/issue`.                                                    |
 | `hardening_login_defs_mail_dir`         |                            __/var/mail__                             | Directory to store user mails.                                                        |
 | `hardening_login_defs_create_home`      |                                 yes                                  | Create by default ,home directory if it doesn't exist.                                |
 | `hardening_login_defs_default_home`     |                                  no                                  | Allow login if no home directory for user exist.                                      |
-| `hardening_login_defs_umask`            |                      `hardenings_system_umask`                       | Sets umask for home directory creation.                                               |
+| `hardening_login_defs_umask`            |                       `hardening_login_umask`                        | Sets umask for home directory creation.                                               |
 | `hardening_login_defs_env_paths`        |                                  []                                  | Extend PATH environment variable with extra paths.                                    |
 | `hardening_login_defs_uid_min`          |                                10000                                 | UID minimum while creating new users.                                                 |
 | `hardening_login_defs_gid_min`          |                                10000                                 | GID minimum while creating new groups.                                                |
@@ -54,67 +57,65 @@ The role is devided into different parts:
 | `hardening_login_defs_pass_max_days`    |                                 180                                  | Maximum age for user password in days.                                                |
 | `hardening_login_defs_pass_warn_age`    |                                  14                                  | Number of days before password will be expired to print a warn message.               |
 | `hardening_login_defs_pass_min_length`  |                                  32                                  | Minumin length of password.                                                           |
-| `hardening_login_defs_sulog_file`       |                        __/var/log/sulog.log__                        | Logfile location to log `su` command executions to.                                   |
+| `hardening_logi<n_defs_sulog_file`      |                        __/var/log/sulog.log__                        | Logfile location to log `su` command executions to.                                   |
 | `hardening_login_defs_extra`            |                                  {}                                  | Dictionary to use for extra arguments to setup `login.defs`.                          |
 | `hardening_login_useradd_default_shell` |                              /bin/bash                               | The SHELL variable specifies the default login shell on your system.                  |
 | `hardening_login_useradd_set_inactive`  |                                  30                                  | The number of days after a password expires until the account is permanently disabled |
 | `hardening_login_useradd_extras`        |                                  {}                                  | Dictionary to use for extra arguments to setup `useradd`. See `man 8 useradd`         |
-| `hardening_login_motd`                  |  Banner message. See [templates/etc/motd.j2](templates/etc/motd.j2)  | Fulltext message for `/etc/motd`.                                                     |
-| `hardening_login_issue`                 | Banner message. See [templates/etc/issue.j2](templates/etc/issue.j2) | Fulltext message for `/etc/issue`.                                                    |
 
 ### Limits
 
 | Name                                    | Default | Description                                                         |
 | :-------------------------------------- | :-----: | ------------------------------------------------------------------- |
-| `hardening_enable_limits_configuration` |  true   | Enables/Disables kernel limits configuration.                       |
+| `hardening_limits`                      |  true   | Enables/Disables kernel limits configuration.                       |
 | `hardening_limits_maxlogins_count_hard` |    5    | Sets the __hard__ limit for concurrent users and sessions per user. |
 | `hardening_limits_process_count_soft`   |   100   | Sets the __soft__ limit for per user process creation count.        |
 | `hardening_limits_process_count_hard`   |   500   | Sets the __hard__ limit for per user process creation count.        |
 
 ### File permissions
 
-| Name                                        | Default | Description                                                                    |
-| :------------------------------------------ | :-----: | ------------------------------------------------------------------------------ |
-| `hardening_enable_file_perms_configuration` |  true   | Enables/Disables setting and ensuring now write for group and others on files. |
+| Name                   | Default | Description                                                                    |
+| :--------------------- | :-----: | ------------------------------------------------------------------------------ |
+| `hardening_file_perms` |  true   | Enables/Disables setting and ensuring now write for group and others on files. |
 
 ### Deactivate old and and vulnerable filesystems
 
-| Name                                              | Default | Description                                                          |
-| :------------------------------------------------ | :-----: | -------------------------------------------------------------------- |
-| `hardening_enable_filesytem_module_configuration` |  true   | Enables/Disables blacklisting of old and vulnerable filesystems.     |
-| `hardening_filesystem_package`                    |  kmod   | Package to install to be able to configure blacklist of filesystems. |
-| `hardening_filesystem_whitelist`                  |   []    | List of filesystems you want to exclude from the blacklist list.     |
+| Name                             | Default | Description                                                          |
+| :------------------------------- | :-----: | -------------------------------------------------------------------- |
+| `hardening_filesytem_module`     |  true   | Enables/Disables blacklisting of old and vulnerable filesystems.     |
+| `hardening_filesystem_package`   |  kmod   | Package to install to be able to configure blacklist of filesystems. |
+| `hardening_filesystem_whitelist` |   []    | List of filesystems you want to exclude from the blacklist list.     |
 
 ### Cryptop policies (only RedHat)
 
 This playbook will set the systemwide crypto policy.
 :exclamation: This module only runs on RedHat based distributions.
 
-| Name                                                  | Default | Description                                   |
-| :---------------------------------------------------- | :-----: | --------------------------------------------- |
-| `hardening_enable_crypto_policy_module_configuration` |  true   | Enables/Disables crypto policy configuration. |
-| `hardening_crypto_policy`                             | DEFAULT | Set by default the crypto policy.             |
+| Name                             | Default | Description                                   |
+| :------------------------------- | :-----: | --------------------------------------------- |
+| `hardening_crypto_policy_module` |  true   | Enables/Disables crypto policy configuration. |
+| `hardening_crypto_policy`        | DEFAULT | Set by default the crypto policy.             |
 
 ### Services
 
-| Name                                      | Default | Description                              |
-| :---------------------------------------- | :-----: | ---------------------------------------- |
-| `hardening_enable_services_configuration` |  true   | Enables/Disables services configuration. |
-| `hardening_whitelist_services`            |   []    | List of services to whitelist.           |
+| Name                           | Default | Description                              |
+| :----------------------------- | :-----: | ---------------------------------------- |
+| `hardening_services`           |  true   | Enables/Disables services configuration. |
+| `hardening_whitelist_services` |   []    | List of services to whitelist.           |
 
 ### Network
 
-| Name                                     | Default | Description                                           |
-| :--------------------------------------- | :-----: | ----------------------------------------------------- |
-| `hardening_enable_network_configuration` |  true   | Enables/Disables network configuration.               |
-| `hardening_network_dns_servers`          |   []    | List of DNS server IP addresses in `/etc/resolv.conf` |
-| `hardening_network_search_bases`         |   []    | List of DNS search base entries in `/etc/resolv.conf` |
+| Name                             | Default | Description                                           |
+| :------------------------------- | :-----: | ----------------------------------------------------- |
+| `hardening_network`              |  true   | Enables/Disables network configuration.               |
+| `hardening_network_dns_servers`  |   []    | List of DNS server IP addresses in `/etc/resolv.conf` |
+| `hardening_network_search_bases` |   []    | List of DNS search base entries in `/etc/resolv.conf` |
 
 ### User
 
 | Name                                                  | Default | Description                                                                         |
 | :---------------------------------------------------- | :-----: | ----------------------------------------------------------------------------------- |
-| `hardening_enable_user_configuration`                 |  true   | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
+| `hardening_user`                                      |  true   | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
 | `hardening_user_admin_user`                           |  admin  | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
 | `hardening_user_admin_group`                          | admins  | Enables/Disables administrativ user and group creation. Adds user to sudoers group. |
 | `hardening_user_admin_user_ssh_pub_keys` __required__ |   []    | List of public SSH keys to place into administrativ account.                        |

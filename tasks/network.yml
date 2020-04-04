@@ -11,9 +11,21 @@
       value: none
     - option: rc-managed
       value: unmanaged
-  become: true
-  when: (hardening_network_search_bases | length > 0 or hardening_network_dns_servers | length > 0)
+  when:
+    - (hardening_network_search_bases | length > 0 or hardening_network_dns_servers | length > 0)
+    - ansible_os_family == "RedHat"
   notify: restart NetworkManager
+
+- name: disable dhclient autoupdate resolv.conf
+  copy:
+    content: "make_resolv_conf() { :; }"
+    dest: /etc/dhcp/dhclient-enter-hooks.d/nodnsautoupdate
+    owner: root
+    group: root
+    mode: 0755
+  when:
+    - (hardening_network_search_bases | length > 0  or hardening_network_dns_servers | length > 0)
+    - ansible_os_family == "Debian"
 
 - name: configure resolve.conf dns servers
   template:
@@ -23,14 +35,12 @@
     group: root
     mode: 0644
   when: (hardening_network_search_bases | length > 0  or hardening_network_dns_servers | length > 0)
-  become: true
 
 - name: disable zeroconf configuration
   lineinfile:
     path: /etc/sysconfig/network
     line: "NOZEROCONF=yes"
     state: present
-  become: true
   when: ansible_os_family == "RedHat"
 
 - name: blacklist uncommon network protocols
@@ -40,5 +50,3 @@
     owner: root
     group: root
     mode: 0640
-  become: true
-  notify: reboot system

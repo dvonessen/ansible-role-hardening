@@ -3,7 +3,6 @@
   package:
     name: "{{ hardening_mount_filesystems_packages }}"
     state: present
-  become: true
 
 - name: bind mountpoints
   block:
@@ -62,5 +61,4 @@
     owner: root
     group: root
     mode: 0640
-  become: true
   notify: reboot system

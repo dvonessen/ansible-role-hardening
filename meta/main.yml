@@ -4,15 +4,13 @@ galaxy_info:
   description: This role does some basic infrastructure hardening tasks
   min_ansible_version: 2.9
   platforms:
-    - name: RHEL
+    - name: Centos
       versions:
         - 8
+        - 8.1
     - name: Debian
       versions:
         - 10
-    - name: Ubuntu
-      versions:
-        - 18.04
   galaxy_tags: [security, system, hardening]
 
   license: MIT

@@ -5,28 +5,27 @@ driver:
   name: vagrant
   provider:
     name: virtualbox
-lint: yamllint
 platforms:
   - name: hardeningcentos8
     box: centos/8
     box_version: 1905.1
     memory: 4096
     cpus: 4
-    provision: True
+    provision: true
   - name: hardeningdebian10
     box: debian/buster64
     box_version: 10.3.0
     memory: 4096
     cpus: 4
-    provision: True
+    provision: true
 provisioner:
   name: ansible
   config_options:
     defaults:
       stdout_callback: yaml
-  lint:
-    name: ansible-lint
-verifier:
-  name: ansible
-  lint:
-    name: flake8
+      interpreter_python: auto_silent
+lint: |
+  set -e
+  yamllint -c .yamllint .
+  flake8
+  ansible-lint

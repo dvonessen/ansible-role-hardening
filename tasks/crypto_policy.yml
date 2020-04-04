@@ -6,10 +6,5 @@
     owner: root
     group: root
     mode: 0644
-  become: true
-  register: __crypto_config
+  register: __hardening_crypto_config
   notify: reboot system
-
-- name: propagate crypto policy config
-  command: update-crypto-policies
-  when: __crypto_config.changed | bool

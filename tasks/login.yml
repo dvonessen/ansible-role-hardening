@@ -6,7 +6,6 @@
     owner: root
     group: root
     mode: 0644
-  become: true
 
 - name: configure useradd defaults
   template:
@@ -15,7 +14,6 @@
     owner: root
     group: root
     mode: 0644
-  become: true
 
 - name: configure hardening features in profile.d
   template:
@@ -24,7 +22,6 @@
     owner: root
     group: root
     mode: 0644
-  become: true
 
 - name: set umask for init.d functions
   replace:
@@ -33,41 +30,18 @@
     mode: 0644
     path: /etc/init.d/functions
     regexp: '(^[^ \t])*(umask)([ \t])*\d{3,4}'
-    replace: '\1umask {{ hardening_system_umask }}'
+    replace: '\1umask {{ hardening_login_umask }}'
   when: ansible_os_family == "RedHat"
-  become: true
 
-- name: configure motd and issue
-  block:
-    - name: check if issue.net exists
-      stat:
-        path: /etc/issue.net
-      register: __hardening_login_issue_net
+- name: delete issue.net
+  file:
+    path: /etc/issue.net
+    state: absent
 
-    - name: delete issue.net
-      file:
-        path: /etc/issue.net
-        state: absent
-      when: __hardening_login_issue_net.stat.exists | bool
-
-    - name: check if update-motd.d exists
-      stat:
-        path: /etc/update-motd.d
-      register: __hardening_login_update_motd_d
-
-    - name: find all files in update-motd.d
-      shell:
-        cmd: "find /etc/update-motd.d -mindepth 1"
-      register: __hardening_login_found_update_motd_d_files
-      when: __hardening_login_update_motd_d.stat.exists | bool
-      changed_when: false
-
-    - name: remove all files from update-motd.d
-      file:
-        path: "{{ item }}"
-        state: absent
-      loop: "{{ __hardening_login_found_update_motd_d_files.stdout_lines }}"
-      when: __hardening_login_found_update_motd_d_files.changed | bool
+- name: remove all files from update-motd.d
+  file:
+    path: /etc/update-motd.d
+    state: absent
 
 - name: configure /etc/motd and /etc/issue
   template:

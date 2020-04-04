@@ -3,14 +3,12 @@
   package:
     name: "{{ hardening_syctl_package }}"
     state: present
-  become: true
 
 - name: ensure certain kernel parameters are set
   sysctl:
     name: "{{ item.name }}"
     value: "{{ item.value }}"
-    sysctl_file: "{{ __hardening_sysctl_conf }}"
-    state: "{{ item.state | default('present') }}"
-  loop: "{{ __hardening_sysctl_kernel_parameters }}"
-  become: true
+    sysctl_file: "{{ hardening_sysctl_conf }}"
+    state: present
+  loop: "{{ hardening_sysctl_kernel_parameters }}"
   notify: reboot system

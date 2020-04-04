@@ -4,9 +4,10 @@
     name: NetworkManager.service
     state: restarted
   become: true
-  when: "'NetworkManager.service' in ansible_facts.services"
 
 - name: reboot system
   reboot:
-  when: ansible_virtualization_type | lower != "docker"
+  when:
+    - ansible_virtualization_type | lower != "docker"
+    - hardening_allow_reboot | bool
   become: true

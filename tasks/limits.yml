@@ -10,10 +10,10 @@
 - name: set limits
   pam_limits:
     comment: "{{ item.comment }}"
-    dest: "{{ __hardening_limits_conf_file }}"
+    dest: "{{ hardening_limits_conf_file }}"
     domain: "{{ item.domain }}"
     limit_item: "{{ item.limit_item }}"
     limit_type: "{{ item.limit_type }}"
     value: "{{ item.value }}"
-  loop: "{{ __hardening_limits_conf }}"
+  loop: "{{ hardening_limits_conf }}"
   notify: reboot system
