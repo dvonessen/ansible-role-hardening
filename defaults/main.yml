@@ -166,6 +166,7 @@ hardening_mount_filesystems_blacklist:
   - ubifs
   - udf
   - ufs
+  - vfat
 
 # # # # # # # # # # # #
 # cryptop_policy.yml  #
