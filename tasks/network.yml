@@ -12,7 +12,7 @@
     - option: rc-managed
       value: unmanaged
   when:
-    - (hardening_network_search_bases | length > 0 or hardening_network_dns_servers | length > 0)
+    - (hardening_network_dns_search_bases | length > 0 or hardening_network_dns_servers | length > 0)
     - ansible_os_family == "RedHat"
   notify: restart NetworkManager
 
@@ -24,7 +24,7 @@
     group: root
     mode: 0755
   when:
-    - (hardening_network_search_bases | length > 0  or hardening_network_dns_servers | length > 0)
+    - (hardening_network_dns_search_bases | length > 0  or hardening_network_dns_servers | length > 0)
     - ansible_os_family == "Debian"
 
 - name: configure resolve.conf dns servers
@@ -34,7 +34,7 @@
     owner: root
     group: root
     mode: 0644
-  when: (hardening_network_search_bases | length > 0  or hardening_network_dns_servers | length > 0)
+  when: (hardening_network_dns_search_bases | length > 0  or hardening_network_dns_servers | length > 0)
 
 - name: disable zeroconf configuration
   lineinfile:

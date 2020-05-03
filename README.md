@@ -105,11 +105,11 @@ This playbook will set the systemwide crypto policy.
 
 ### Network
 
-| Name                             | Default | Description                                           |
-| :------------------------------- | :-----: | ----------------------------------------------------- |
-| `hardening_network`              |  true   | Enables/Disables network configuration.               |
-| `hardening_network_dns_servers`  |   []    | List of DNS server IP addresses in `/etc/resolv.conf` |
-| `hardening_network_search_bases` |   []    | List of DNS search base entries in `/etc/resolv.conf` |
+| Name                                 | Default | Description                                           |
+| :----------------------------------- | :-----: | ----------------------------------------------------- |
+| `hardening_network`                  |  true   | Enables/Disables network configuration.               |
+| `hardening_network_dns_servers`      |   []    | List of DNS server IP addresses in `/etc/resolv.conf` |
+| `hardening_network_dns_search_bases` |   []    | List of DNS search base entries in `/etc/resolv.conf` |
 
 ### User
 
