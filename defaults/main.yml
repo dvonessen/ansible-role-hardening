@@ -181,6 +181,7 @@ hardening_whitelist_services: []
 hardening_blacklist_services:
   - autofs.service
   - debug-shell.service
+  - apport.service
 
 # # # # # #
 # yum.yml #

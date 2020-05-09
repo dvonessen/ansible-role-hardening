@@ -89,9 +89,9 @@
   tags:
     - hardening_network
 
-# - name: import user.yml
-#   import_tasks: user.yml
-#   become: true
-#   when: hardening_enable_user_configuration | bool
-#   tags:
-#     - hardening_user
+- name: import user.yml
+  import_tasks: user.yml
+  become: true
+  when: hardening_user | bool
+  tags:
+    - hardening_user

@@ -18,6 +18,12 @@ platforms:
     memory: 4096
     cpus: 4
     provision: true
+  - name: hardeningubuntu2004s
+    box: ubuntu/focal64
+    box_version: 20200505.0.0
+    memory: 4096
+    cpus: 4
+    provision: true
 provisioner:
   name: ansible
   config_options:

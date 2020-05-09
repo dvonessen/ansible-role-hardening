@@ -64,6 +64,20 @@
         state: file
       loop: "{{ __hardening_group_other_write_bin_files.stdout_lines }}"
 
+- name: ensure skeleton files matches umask setting
+  block:
+    - name: find all files in /etc/skel
+      shell:
+        cmd: "find /etc/skel/ -type f"
+      register: __hardening_skeleton_files
+      changed_when: false
+
+    - name: ensure correct permission
+      file:
+        path: "{{ item }}"
+        mode: "0600"
+      loop: "{{ __hardening_skeleton_files.stdout_lines }}"
+
 - name: ensure account files have correct permissions
   block:
     - name: ensure shadow permissions
@@ -131,8 +145,9 @@
     - name: set correct permission to home directory files
       file:
         path: "{{ item }}"
-        mode: g-w,o-rwx
+        mode: 0750
         state: file
+      changed_when: false
       loop: "{{ __hardening_home_files.stdout_lines }}"
 
     - name: find directories in  /home that do have more permissions than 0750
@@ -147,6 +162,7 @@
         path: "{{ item }}"
         mode: g-w,o-rwx
         state: directory
+      changed_when: false
       loop: "{{ __hardening_home_directories.stdout_lines }}"
 
 - name: change su perms to only be accessible by root
