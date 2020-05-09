@@ -19,5 +19,4 @@
   when:
     - hardening_user_admin_user_ssh_pub_keys is defined
     - hardening_user_admin_user_ssh_pub_keys | length > 0
-  with_items:
-    - hardening_user_admin_user_ssh_pub_keys
+  loop: "{{ hardening_user_admin_user_ssh_pub_keys }}"
