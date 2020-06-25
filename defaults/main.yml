@@ -213,3 +213,4 @@ hardening_network_blacklist_net_protocols:
 hardening_user: true
 hardening_user_admin_user: admin
 hardening_user_admin_group: admins
+hardening_user_admin_password: "!"

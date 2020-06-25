@@ -11,6 +11,7 @@
     comment: Administrativ User
     group: "{{ hardening_user_admin_group }}"
     uid: 10000
+    password: "{{ hardening_user_admin_password }}"
 
 - name: copy publickey to administrativ users home dir
   authorized_key:

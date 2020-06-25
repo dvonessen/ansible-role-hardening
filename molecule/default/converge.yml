@@ -17,3 +17,4 @@
       - 1.0.0.1
     hardening_network_dns_search_bases:
       - localdomain
+    hardening_user_admin_password: "$6$HbiLuAG.qArODKOD$pBeMm0wjfscVWG55e3iUiB5omf7hognkkk7BGFUodY6tVlTIhNIF9l2sU7kgs04BamTKm2QCgqn31QR59qSYq1"
