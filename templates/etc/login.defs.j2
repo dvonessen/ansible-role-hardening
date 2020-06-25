@@ -35,7 +35,6 @@ PASS_MAX_DAYS     {{ hardening_login_defs_pass_max_days }}
 PASS_WARN_AGE     {{ hardening_login_defs_pass_warn_age }}
 PASS_MIN_LEN      {{ hardening_login_defs_pass_min_length }}
 SULOG_FILE        {{ hardening_login_defs_sulog_file }}
-FAIL_DELAY        {{ hardening_pam_fail_delay/1000**2 }}
 LOGIN_TIMEOUT     {{ hardening_login_timeout }}
 
 # Key Value loop to add extra values
