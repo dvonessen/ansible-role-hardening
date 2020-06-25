@@ -164,10 +164,3 @@
         state: directory
       changed_when: false
       loop: "{{ __hardening_home_directories.stdout_lines }}"
-
-- name: change su perms to only be accessible by root
-  file:
-    path: /bin/su
-    owner: root
-    group: root
-    mode: 0750
