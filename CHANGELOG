@@ -1,0 +1,56 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [1.2.0] - 2020-06-25
+### Added
+* CHANGELOG to project to keep track of changes.
+* admin user password.
+* Sudo for admin group template.
+
+### Changed
+* Ansible Tag handling in main.yml.
+
+### Removed
+* Changing `su` binary permissions from tasks.
+* FAILED_DELAY removed it is deprecated.
+
+## [1.1.2] - 2020-05-10
+### Fixed
+* Platforms fix in Ansible `meta.yml`.
+
+## [1.1.1] - 2020-05-09
+### Changed
+* Converted `with_items` to newer `loop` in `user.yml`
+
+## [1.1.0] - 2020-05-09
+### Added
+* Molecule test is also done on Ubuntu 20.04LTS
+* Uncomment `user.yml` in `main.yml` to allow admin user/group creation.
+* Ensure that files in `/etc/skel` have permissions that are more secure.
+* Blacklist `apport.service` to prevent generating core dumps.
+
+### Changed
+* Variable for `when` clause for user creation tasks.
+
+### Fixed
+* Added `changed_when: false` to `/home` directory tasks to keep idempotency.
+
+## [1.0.0] - 2020-05-03
+### Added
+* Initial release of `anible-role-hardening`
+* Added default linting configuration for ansible roles.
+
+### Changed
+* Changed `hardening_network_search_bases` to `hardening_network_search_bases` to make it clearer what this variable is used for.
+
+[Unreleased]: https://gitlab.com/dvonessen/ansible-role-hardening/-/compare/1.2.0...master
+[1.2.0]: https://gitlab.com/dvonessen/ansible-role-hardening/-/compare/1.1.2...1.2.0
+[1.1.2]: https://gitlab.com/dvonessen/ansible-role-hardening/-/compare/1.1.1...1.1.2
+[1.1.1]: https://gitlab.com/dvonessen/ansible-role-hardening/-/compare/1.1.0...1.1.1
+[1.1.0]: https://gitlab.com/dvonessen/ansible-role-hardening/-/compare/1.0.0...1.1.0
+[1.0.0]: https://gitlab.com/dvonessen/ansible-role-hardening/-/releases/1.0.0
