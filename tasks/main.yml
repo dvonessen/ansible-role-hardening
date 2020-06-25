@@ -2,7 +2,18 @@
 - name: import preflight.yml
   import_tasks: preflight.yml
   tags:
-    - always
+    - hardening_all
+    - hardening_pam
+    - hardening_login
+    - hardening_limits
+    - hardening_sysctl
+    - hardening_file_permissions
+    - hardening_mount_filesystems
+    - hardening_crypto_policy
+    - hardening_services
+    - hardening_yum
+    - hardening_network
+    - hardening_user
 
 - name: include os dependent variable file
   include_vars: "{{ item }}"
@@ -11,13 +22,25 @@
         - "{{ ansible_os_family | lower }}.yml"
       skip: true
   tags:
-    - always
+    - hardening_all
+    - hardening_pam
+    - hardening_login
+    - hardening_limits
+    - hardening_sysctl
+    - hardening_file_permissions
+    - hardening_mount_filesystems
+    - hardening_crypto_policy
+    - hardening_services
+    - hardening_yum
+    - hardening_network
+    - hardening_user
 
 - name: import pam.yml
   import_tasks: pam.yml
   when: hardening_pam | bool
   become: true
   tags:
+    - hardening_all
     - hardening_pam
 
 - name: import login.yml
@@ -25,6 +48,7 @@
   when: hardening_login | bool
   become: true
   tags:
+    - hardening_all
     - hardening_login
 
 - name: import limits.yml
@@ -32,6 +56,7 @@
   when: hardening_limits | bool
   become: true
   tags:
+    - hardening_all
     - hardening_limits
 
 - name: import sysctl.yml
@@ -39,6 +64,7 @@
   when: hardening_sysctl | bool
   become: true
   tags:
+    - hardening_all
     - hardening_sysctl
 
 - name: import file_permissions.yml
@@ -46,6 +72,7 @@
   when: hardening_file_perms | bool
   become: true
   tags:
+    - hardening_all
     - hardening_file_permissions
 
 - name: import mount_filesystems.yml
@@ -53,6 +80,7 @@
   when: hardening_mount_filesystems | bool
   become: true
   tags:
+    - hardening_all
     - hardening_mount_filesystems
 
 - name: import crypto_policy.yml
@@ -62,6 +90,7 @@
     - hardening_crypto_policy | bool
     - ansible_os_family == "RedHat"
   tags:
+    - hardening_all
     - hardening_crypto_policy
 
 - name: import services.yml
@@ -70,6 +99,7 @@
   when:
     - hardening_services | bool
   tags:
+    - hardening_all
     - hardening_services
 
 - name: import yum.yml
@@ -79,6 +109,7 @@
     - hardening_yum | bool
     - ansible_os_family == "RedHat"
   tags:
+    - hardening_all
     - hardening_yum
 
 - name: import network.yml
@@ -87,6 +118,7 @@
   when:
     - hardening_network | bool
   tags:
+    - hardening_all
     - hardening_network
 
 - name: import user.yml
@@ -94,4 +126,5 @@
   become: true
   when: hardening_user | bool
   tags:
+    - hardening_all
     - hardening_user

@@ -122,14 +122,20 @@ This playbook will set the systemwide crypto policy.
 
 ## Tags
 
-| Name                         | Description                              |
-| ---------------------------- | ---------------------------------------- |
-| `hardening_pam`              | Includes pam configuration.              |
-| `hardening_login`            | Includes `login.defs` configuration.     |
-| `hardening_limits`           | Includes kernel limits configuration.    |
-| `hardening_file_permissions` | Includes file permissions configuration. |
-| `hardening_network`          | Includes network configuration.          |
-| `hardening_user`             | Creation of administrativ user.          |
+| Name                          | Description                              |
+| ----------------------------- | ---------------------------------------- |
+| `hardening_all`               | Run all hardening tasks.                 |
+| `hardening_pam`               | Includes pam configuration.              |
+| `hardening_login`             | Includes `login.defs` configuration.     |
+| `hardening_limits`            | Includes kernel limits configuration.    |
+| `hardening_sysctl`            | Includes syctl configuration.            |
+| `hardening_file_permissions`  | Includes file permissions configuration. |
+| `hardening_mount_filesystems` | Includes mount configuration.            |
+| `hardening_crypto_policy`     | Includes crypto policy configuration.    |
+| `hardening_services`          | Includes services configuration.         |
+| `hardening_yum`               | Includes yum configuration.              |
+| `hardening_network`           | Includes network configuration.          |
+| `hardening_user`              | Creation of administrativ user.          |
 
 ## Dependencies
 ---------------
