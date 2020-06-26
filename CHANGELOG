@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 * Fixup ubuntu 20.04 machine image name.
 
+### Removed
+* Ubuntu 20.04 testing vagrant box.
+
 ## [1.2.0] - 2020-06-25
 ### Added
 * CHANGELOG to project to keep track of changes.
