@@ -10,5 +10,6 @@
     value: "{{ item.value }}"
     sysctl_file: "{{ hardening_sysctl_conf }}"
     state: present
+  when: item.name not in hardening_sysctl_kernel_parameters_blacklist
   loop: "{{ hardening_sysctl_kernel_parameters }}"
   notify: reboot system

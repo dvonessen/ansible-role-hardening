@@ -72,6 +72,7 @@ hardening_limits_conf:
 # # # # # # # #
 hardening_sysctl: true
 hardening_sysctl_conf: /etc/sysctl.d/98-hardening.conf
+hardening_sysctl_kernel_parameters_blacklist: []
 hardening_sysctl_kernel_parameters:
   - name: fs.protected_symlinks
     value: "1"
