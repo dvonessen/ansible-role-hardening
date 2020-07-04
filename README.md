@@ -7,7 +7,6 @@ This role keeps a baseline of linux hardening options.
 
 The role is devided into different parts:
 
-- Configuration of PAM (Pluggable Authentication Model)
 - Configuration of `login.defs`
 - Set some good Kernel limits
 - Configure sudo
@@ -25,21 +24,12 @@ The role is devided into different parts:
 | :----------------------- | :-----: | ------------------------------------------- |
 | `hardening_allow_reboot` |  true   | Allows execution of `reboot system` handler |
 
-### PAM
-
-| Name                          | Default  | Description                                                      |
-| :---------------------------- | :------: | ---------------------------------------------------------------- |
-| `hardening_pam`               |   true   | Enables/Disables PAM hardening.                                  |
-| `hardening_pam_failed_logins` |    4     | Faild login tries before user account gets locked.               |
-| `hardening_pam_unlock_time`   |    60    | Seconds how long user account will be locked after n tries.      |
-| `hardening_pam_fail_delay`    | 10000000 | Milliseconds how long the delay is after failing authentication. |
-
 ### Login
 
 | Name                                    |                               Default                                | Description                                                                           |
 | :-------------------------------------- | :------------------------------------------------------------------: | ------------------------------------------------------------------------------------- |
 | `hardening_login`                       |                                 true                                 | Enables/Disables login.defs configurations.                                           |
-| `hardening_login_umask`                 |                                 0077                                 | Used by different tasks to set the umask. E.g. PAMs pam_umask.so or login.defs        |
+| `hardening_login_umask`                 |                                 0077                                 | Used by different tasks to set the umask. E.g. login.defs                             |
 | `hardening_login_timeout`               |                                 1800                                 | Default timeout for system SHELL if no input is given in seconds.                     |
 | `hardening_login_motd`                  |  Banner message. See [templates/etc/motd.j2](templates/etc/motd.j2)  | Fulltext message for `/etc/motd`.                                                     |
 | `hardening_login_issue`                 | Banner message. See [templates/etc/issue.j2](templates/etc/issue.j2) | Fulltext message for `/etc/issue`.                                                    |
@@ -125,7 +115,6 @@ This playbook will set the systemwide crypto policy.
 | Name                          | Description                              |
 | ----------------------------- | ---------------------------------------- |
 | `hardening_all`               | Run all hardening tasks.                 |
-| `hardening_pam`               | Includes pam configuration.              |
 | `hardening_login`             | Includes `login.defs` configuration.     |
 | `hardening_limits`            | Includes kernel limits configuration.    |
 | `hardening_sysctl`            | Includes syctl configuration.            |

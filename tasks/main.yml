@@ -3,7 +3,6 @@
   import_tasks: preflight.yml
   tags:
     - hardening_all
-    - hardening_pam
     - hardening_login
     - hardening_limits
     - hardening_sysctl
@@ -23,7 +22,6 @@
       skip: true
   tags:
     - hardening_all
-    - hardening_pam
     - hardening_login
     - hardening_limits
     - hardening_sysctl
@@ -34,14 +32,6 @@
     - hardening_yum
     - hardening_network
     - hardening_user
-
-- name: import pam.yml
-  import_tasks: pam.yml
-  when: hardening_pam | bool
-  become: true
-  tags:
-    - hardening_all
-    - hardening_pam
 
 - name: import login.yml
   import_tasks: login.yml

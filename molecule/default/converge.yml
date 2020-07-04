@@ -10,8 +10,6 @@
     hardening_login_env_paths:
       - ~/bin
       - ~/.bin
-    hardening_pam_fail_delay: 5000000
-    hardening_pam_failed_logins: 5
     hardening_network_dns_servers:
       - 1.1.1.1
       - 1.0.0.1

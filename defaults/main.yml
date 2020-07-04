@@ -4,14 +4,6 @@
 # # # # # #
 hardening_allow_reboot: true
 
-# # # # # #
-# pam.yml #
-# # # # # #
-hardening_pam: true
-hardening_pam_failed_logins: 4
-hardening_pam_unlock_time: 60
-hardening_pam_fail_delay: 10000000
-
 # # # # # # #
 # login.yml #
 # # # # # # #
