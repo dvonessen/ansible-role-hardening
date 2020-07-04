@@ -133,6 +133,12 @@ hardening_file_perms_bin_dirs:
 # mount_filesystems.yml #
 # # # # # # # # # # # # #
 hardening_mount_filesystems: true
+hardening_mount_secure_home: true
+hardening_mount_secure_boot: true
+hardening_mount_secure_var: true
+hardening_mount_secure_var_log: true
+hardening_mount_secure_var_tmp: true
+hardening_mount_secure_tmpfs: true
 hardening_mount_filesystems_whitelist: []
 hardening_mount_filesystems_blacklist:
   - adfs

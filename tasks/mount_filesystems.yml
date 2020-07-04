@@ -6,35 +6,50 @@
 
 - name: bind mountpoints
   block:
-    - name: secure /home and /boot directory
+    - name: secure /home mount
       mount:
-        src: "{{ item }}"
-        path: "{{ item }}"
+        src: /home
+        path: /home
         opts: bind,defaults,nosuid,nodev
         fstype: none
         state: present
-      loop:
-        - /home
-        - /boot
+      when: hardening_mount_secure_home | bool
 
-    - name: secure /var directory
+    - name: secure /boot mount
+      mount:
+        src: /boot
+        path: /boot
+        opts: bind,defaults,nosuid,nodev
+        fstype: none
+        state: present
+      when: hardening_mount_secure_boot | bool
+
+    - name: secure /var mount
       mount:
         src: /var
         path: /var
         opts: bind,defaults,nodev
         fstype: none
         state: present
+      when: hardening_mount_secure_var | bool
 
-    - name: secure /var/tmp and /var/log directory
+    - name: secure /var/tmp mount
       mount:
-        src: "{{ item }}"
-        path: "{{ item }}"
+        src: /var/tmp
+        path: /var/tmp
         opts: bind,defaults,nosuid,nodev,noexec
         fstype: none
         state: present
-      loop:
-        - /var/tmp
-        - /var/log
+      when: hardening_mount_secure_var_tmp | bool
+
+    - name: secure /var/log mount
+      mount:
+        src: /var/log
+        path: /var/log
+        opts: bind,defaults,nosuid,nodev,noexec
+        fstype: none
+        state: present
+      when: hardening_mount_secure_var_log | bool
 
 - name: tmpfs mountpoints
   block:
@@ -53,6 +68,8 @@
         src: tmpfs
         path: /dev/shm
         state: present
+  when: hardening_mount_secure_tmpfs | bool
+
 
 - name: creating blacklist for old and vulnerable filesystems
   template:
