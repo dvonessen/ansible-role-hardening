@@ -10,6 +10,9 @@ galaxy_info:
     - name: Debian
       versions:
         - buster
+    - name: ArchLinux
+      versions:
+        - Any
   galaxy_tags: [security, system, hardening]
 
   license: MIT

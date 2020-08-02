@@ -1,6 +1,13 @@
 ---
-- name: import preflight.yml
-  import_tasks: preflight.yml
+- name: include os dependent variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_distribution | lower }}{{ ansible_distribution_major_version }}.yml"
+        - "{{ ansible_distribution | lower }}.yml"
+        - "{{ ansible_os_family | lower }}.yml"
+        - main.yml
+      skip: true
   tags:
     - hardening_all
     - hardening_login
@@ -14,12 +21,8 @@
     - hardening_network
     - hardening_user
 
-- name: include os dependent variable file
-  include_vars: "{{ item }}"
-  with_first_found:
-    - files:
-        - "{{ ansible_os_family | lower }}.yml"
-      skip: true
+- name: import preflight.yml
+  import_tasks: preflight.yml
   tags:
     - hardening_all
     - hardening_login

@@ -18,6 +18,12 @@ platforms:
     memory: 4096
     cpus: 4
     provision: true
+  - name: hardeningarchlinux
+    box: archlinux/archlinux
+    box_version: 2020.06.03
+    memory: 4096
+    cpus: 4
+    provision: true
 provisioner:
   name: ansible
   config_options:

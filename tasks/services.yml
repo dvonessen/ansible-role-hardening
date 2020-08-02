@@ -38,12 +38,3 @@
         masked: yes
       loop: "{{ hardening_blacklist_services | difference(hardening_whitelist_services) }}"
       when: item in ansible_facts.services
-
-    - name: disable and mask special systemd units
-      systemd:
-        name: "{{ item }}"
-        state: stopped
-        enabled: no
-        masked: yes
-      loop:
-        - ctrl-alt-del.target

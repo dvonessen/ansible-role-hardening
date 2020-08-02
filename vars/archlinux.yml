@@ -1,0 +1,14 @@
+---
+hardening_file_perms_shadow:
+  user: root
+  group: root
+  mode: "0600"
+
+hardening_file_perms_passwd:
+  user: root
+  group: root
+  mode: "0644"
+
+hardening_mount_filesystems_packages: kmod
+
+hardening_syctl_package: procps-ng
