@@ -32,22 +32,6 @@
         state: file
       loop: "{{ __hardening_world_writeable_files.stdout_lines }}"
 
-- name: ensure on world writable directories SGID is set
-  block:
-    - name: find world writable directories
-      shell:
-        cmd: 'find / -type d -perm /o=w -print -o \( -path /dev -or -path /sys -or -path /proc -or -path /var/tmp \) -prune'
-      register: __hardening_world_writeable_dirs
-      changed_when: false
-      ignore_errors: true
-
-    - name: set sticky bit to world writable directories
-      file:
-        path: "{{ item }}"
-        mode: +t
-        state: directory
-      loop: "{{ __hardening_world_writeable_dirs.stdout_lines }}"
-
 - name: ensure system binaries are not writeable by group or world
   block:
     - name: find files in bin directories with group or other write permissions
